@@ -5,8 +5,10 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { ModuleStatus } from '../enum/module.enum';
+import { Session } from 'src/course/session/entities/session.entity';
 
 @Entity('tbl_modulo')
 export class Module {
@@ -36,4 +38,7 @@ export class Module {
   @ManyToOne(() => Course, (course) => course.modules)
   @JoinColumn({ name: 'curso_id' })
   course: Course;
+
+  @OneToMany(() => Session, (session) => session.module)
+  sessions: Session[];
 }
