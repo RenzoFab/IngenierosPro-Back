@@ -6,39 +6,42 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ModuleService } from './module.service';
-import { CreateModuleDto } from './dto/create-module.dto';
-import { UpdateModuleDto } from './dto/update-module.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { FindModuleDto, FindOneModuleDto } from './dto';
 
 @ApiTags('Module')
 @Controller('module')
 export class ModuleController {
   constructor(private readonly moduleService: ModuleService) {}
 
-  @Post()
-  create(@Body() createModuleDto: CreateModuleDto) {
-    return this.moduleService.create(createModuleDto);
-  }
+  // @Post()
+  // create(@Body() createModuleDto: CreateModuleDto) {
+  //   return this.moduleService.create(createModuleDto);
+  // }
 
   @Get()
-  findAll() {
-    return this.moduleService.findAll();
+  findAll(@Query() findModuleDto: FindModuleDto) {
+    return this.moduleService.findAll(findModuleDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.moduleService.findOne(+id);
+  findOne(
+    @Param('id') id: number,
+    @Query() findOneModuleDto: FindOneModuleDto,
+  ) {
+    return this.moduleService.findOne(+id, findOneModuleDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateModuleDto: UpdateModuleDto) {
-    return this.moduleService.update(+id, updateModuleDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateModuleDto: UpdateModuleDto) {
+  //   return this.moduleService.update(+id, updateModuleDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.moduleService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.moduleService.remove(+id);
+  // }
 }

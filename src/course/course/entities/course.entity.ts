@@ -3,6 +3,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Company } from './company.entiity';
@@ -13,6 +14,7 @@ import {
   CourseType,
   CourseModality,
 } from '../enum/course.enum';
+import { Module } from 'src/course/module/entities/module.entity';
 
 @Entity('tbl_curso')
 export class Course {
@@ -182,6 +184,9 @@ export class Course {
   @ManyToOne(() => Category, (category) => category.courses)
   @JoinColumn({ name: 'categoria_curso_id' })
   category: Category;
+
+  @OneToMany(() => Module, (module) => module.course)
+  modules: Module[];
 
   //! NO SE USA
   // @Column({ type: 'varchar', length: 20, nullable: true })
