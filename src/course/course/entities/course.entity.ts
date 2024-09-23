@@ -7,29 +7,12 @@ import {
 } from 'typeorm';
 import { Company } from './company.entiity';
 import { Category } from './category.entity';
-
-export enum CourseState {
-  Activo = 'Activo',
-  Pendiente = 'Pendiente',
-  Cancelado = 'Cancelado',
-}
-
-export enum CourseType {
-  Pagado = 'Pagado',
-  Gratuito = 'Gratuito',
-}
-
-export enum CourseModality {
-  Asincrónico = 'Asincrónico',
-  Vivo = 'Vivo',
-  Mixto = 'Mixto',
-}
-
-export enum CourseDifficulty {
-  Básico = 'Básico',
-  Intermedio = 'Intermedio',
-  Avanzado = 'Avanzado',
-}
+import {
+  CourseDifficulty,
+  CourseState,
+  CourseType,
+  CourseModality,
+} from '../enum/course.enum';
 
 @Entity('tbl_curso')
 export class Course {

@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateCourseDto, GetCourseDto } from './dto';
+import { CreateCourseDto, FindCourseDto, FindOneCourseDto } from './dto';
 
 @ApiTags('Course')
 @Controller('course')
@@ -14,13 +14,16 @@ export class CourseController {
   // }
 
   @Get()
-  findAll(@Query() getCourseDto: GetCourseDto) {
-    return this.courseService.findAll(getCourseDto);
+  findAll(@Query() findCourseDto: FindCourseDto) {
+    return this.courseService.findAll(findCourseDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.courseService.findOne(+id);
+  findOne(
+    @Param('id') id: string,
+    @Query() findOneCourseDto: FindOneCourseDto,
+  ) {
+    return this.courseService.findOne(+id, findOneCourseDto);
   }
 
   // @Patch(':id')

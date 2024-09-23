@@ -1,15 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  Course,
-  CourseModality,
-  CourseState,
-  CourseType,
-} from './entities/course.entity';
+import { Course } from './entities/course.entity';
 import { LessThan, MoreThan, Repository } from 'typeorm';
-import { GetCourseDto } from './dto';
+import { FindCourseDto, FindOneCourseDto } from './dto';
 
 @Injectable()
 export class CourseService {
@@ -30,7 +23,7 @@ export class CourseService {
     published,
     state,
     type,
-  }: GetCourseDto) {
+  }: FindCourseDto) {
     const [cursos, total] = await this.courseRepository.findAndCount({
       where: {
         curso_estado: state,
@@ -54,8 +47,25 @@ export class CourseService {
     return { total, cursos };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} course`;
+  async findOne(id: number, { company, published, state }: FindOneCourseDto) {
+    try {
+      const [curso] = await this.courseRepository.findBy({
+        curso_id: id,
+        curso_estado: state,
+        ...(published && {
+          curso_fecha_inicio_publicacion: LessThan(new Date()),
+          curso_fecha_fin_publicacion: MoreThan(new Date()),
+        }),
+        institucion: {
+          institucion_nombre: company,
+        },
+      });
+      if (!curso) throw new NotFoundException('No se encontro el curso');
+      return curso;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
   // update(id: number, updateCourseDto: UpdateCourseDto) {
