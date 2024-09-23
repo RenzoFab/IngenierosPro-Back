@@ -16,46 +16,176 @@ import {
 
 @Entity('tbl_curso')
 export class Course {
-  @PrimaryGeneratedColumn()
-  curso_id: number;
-
-  //! NO SE USA
-  // @Column({ type: 'varchar', length: 20, nullable: true })
-  // curso_codigo: string;
-
-  @Column({ type: 'varchar', length: 200 })
-  curso_nombre: string;
-
-  @Column({ type: 'varchar', length: 1000 })
-  curso_descripcion: string;
-
-  @Column({ type: 'enum', enum: CourseDifficulty })
-  curso_dificultad: CourseDifficulty;
-
-  @Column({ type: 'int' })
-  curso_horas_certificado: number;
-
-  @Column({ type: 'float' })
-  curso_precio_soles: number;
-
-  @Column({ type: 'float' })
-  curso_precio_soles_antes: number;
-
-  @Column({ type: 'float' })
-  curso_precio_dolar: number;
-
-  @Column({ type: 'float' })
-  curso_precio_dolar_antes: number;
-
-  @Column({ type: 'varchar', length: 1000 })
-  curso_imagen: string;
+  @PrimaryGeneratedColumn({ name: 'curso_id' })
+  id: number;
 
   @Column({
+    name: 'curso_estado',
+    type: 'enum',
+    enum: CourseState,
+    default: CourseState.Pendiente,
+  })
+  state: CourseState;
+
+  @Column({
+    name: 'curso_nombre',
+    type: 'varchar',
+    length: 200,
+  })
+  name: string;
+
+  @Column({
+    name: 'curso_descripcion',
+    type: 'varchar',
+    length: 1000,
+  })
+  description: string;
+
+  @Column({
+    name: 'perfil_alumno',
     type: 'varchar',
     length: 1000,
     nullable: true,
   })
-  curso_video_introductorio: string;
+  studentProfile: string;
+
+  @Column({
+    name: 'curso_brochure',
+    type: 'varchar',
+    length: 600,
+    nullable: true,
+  })
+  brochure: string;
+
+  @Column({
+    name: 'curso_horas_certificado',
+    type: 'int',
+  })
+  certifiedHours: number;
+
+  @Column({
+    name: 'curso_dificultad',
+    type: 'enum',
+    enum: CourseDifficulty,
+  })
+  difficulty: CourseDifficulty;
+
+  @Column({
+    name: 'curso_tipo',
+    type: 'enum',
+    enum: CourseType,
+  })
+  type: CourseType;
+
+  @Column({ name: 'curso_modalidad', type: 'enum', enum: CourseModality })
+  modality: CourseModality;
+
+  @Column({
+    name: 'curso_precio_soles',
+    type: 'float',
+  })
+  pricePen: number;
+
+  @Column({
+    name: 'curso_precio_soles_antes',
+    type: 'float',
+  })
+  pricePenBefore: number;
+
+  @Column({
+    name: 'curso_precio_dolar',
+    type: 'float',
+  })
+  priceUsd: number;
+
+  @Column({
+    name: 'curso_precio_dolar_antes',
+    type: 'float',
+  })
+  priceUsdBefore: number;
+
+  @Column({
+    name: 'curso_imagen',
+    type: 'varchar',
+    length: 1000,
+  })
+  image: string;
+
+  @Column({
+    name: 'curso_portada',
+    type: 'varchar',
+    length: 1000,
+    nullable: true,
+  })
+  coverImage: string;
+
+  @Column({
+    name: 'curso_video_introductorio',
+    type: 'varchar',
+    length: 1000,
+    nullable: true,
+  })
+  video: string;
+
+  @Column({
+    name: 'curso_fecha_inicio',
+    type: 'datetime',
+    nullable: true,
+  })
+  startDate: Date;
+
+  @Column({
+    name: 'curso_fecha_fin',
+    type: 'datetime',
+  })
+  endDate: Date;
+
+  @Column({
+    name: 'curso_fecha_inicio_publicacion',
+    type: 'datetime',
+  })
+  publicationStartDate: Date;
+
+  @Column({
+    name: 'curso_fecha_fin_publicacion',
+    type: 'datetime',
+  })
+  publicationEndDate: Date;
+
+  @Column({
+    name: 'curso_duracion',
+    type: 'varchar',
+    length: 45,
+    nullable: true,
+  })
+  duration: string;
+
+  @Column({ name: 'curso_tiempo_acceso', type: 'int' })
+  accessTime: number;
+
+  @Column({
+    name: 'curso_numero_inscritos',
+    type: 'int',
+  })
+  totalStudents: number;
+
+  @Column({ name: 'institucion_id' })
+  companyId: number;
+
+  @Column({ name: 'categoria_curso_id' })
+  categoryId: number;
+
+  @ManyToOne(() => Company, (company) => company.cursos)
+  @JoinColumn({ name: 'institucion_id' })
+  company: Company;
+
+  @ManyToOne(() => Category, (category) => category.courses)
+  @JoinColumn({ name: 'categoria_curso_id' })
+  category: Category;
+
+  //! NO SE USA
+  // @Column({ type: 'varchar', length: 20, nullable: true })
+  // curso_codigo: string;
 
   //! NO SE USA
   // @Column({
@@ -63,25 +193,6 @@ export class Course {
   //   default: () => 'CURRENT_TIMESTAMP',
   // })
   // curso_fecha_creacion: Date;
-
-  @Column({ type: 'datetime' })
-  curso_fecha_fin: Date;
-
-  @Column({ type: 'datetime' })
-  curso_fecha_inicio_publicacion: Date;
-
-  @Column({ type: 'datetime' })
-  curso_fecha_fin_publicacion: Date;
-
-  @Column({
-    type: 'enum',
-    enum: CourseState,
-    default: CourseState.Pendiente,
-  })
-  curso_estado: CourseState;
-
-  @Column({ type: 'int' })
-  curso_tiempo_acceso: number;
 
   // //! NO SE USA
   // @Column({
@@ -98,46 +209,6 @@ export class Course {
   // })
   // curso_descripcion_certificado: string;
 
-  @Column({ type: 'int' })
-  curso_numero_inscritos: number;
-
-  @Column({ type: 'enum', enum: CourseType })
-  curso_tipo: CourseType;
-
-  @Column({ type: 'enum', enum: CourseModality })
-  curso_modalidad: CourseModality;
-
-  @Column({
-    type: 'varchar',
-    length: 600,
-    nullable: true,
-  })
-  curso_brochure: string;
-
-  @Column({ type: 'datetime', nullable: true })
-  curso_fecha_inicio: Date;
-
-  @Column({
-    type: 'varchar',
-    length: 45,
-    nullable: true,
-  })
-  curso_duracion: string;
-
-  @Column({
-    type: 'varchar',
-    length: 1000,
-    nullable: true,
-  })
-  perfil_alumno: string;
-
-  @Column({
-    type: 'varchar',
-    length: 1000,
-    nullable: true,
-  })
-  curso_portada: string;
-
   //! NO SE USA
   // @Column({
   //   type: 'varchar',
@@ -153,18 +224,4 @@ export class Course {
   //   nullable: true,
   // })
   // curso_tipo_reproductor: string;
-
-  @Column()
-  institucion_id: number;
-
-  @Column()
-  categoria_curso_id: number;
-
-  @ManyToOne(() => Company, (company) => company.cursos)
-  @JoinColumn({ name: 'institucion_id' })
-  institucion: Company;
-
-  @ManyToOne(() => Category, (category) => category.cursos)
-  @JoinColumn({ name: 'categoria_curso_id' })
-  categoria: Category;
 }

@@ -3,81 +3,194 @@ import { Course } from './course.entity';
 
 @Entity('tbl_institucion')
 export class Company {
-  @PrimaryGeneratedColumn()
-  institucion_id: number;
+  @PrimaryGeneratedColumn({ name: 'institucion_id' })
+  id: number;
 
-  @Column({ type: 'varchar', length: 100 })
-  institucion_nombre: string;
+  @Column({
+    name: 'institucion_estado',
+    type: 'tinyint',
+  })
+  state: number;
 
-  @Column({ type: 'varchar', length: 200, nullable: true })
-  institucion_nombre_completo: string;
+  @Column({
+    name: 'institucion_nombre',
+    type: 'varchar',
+    length: 100,
+  })
+  name: string;
 
-  @Column({ type: 'varchar', length: 500 })
-  institucion_descripcion: string;
+  @Column({
+    name: 'institucion_nombre_completo',
+    type: 'varchar',
+    length: 200,
+    nullable: true,
+  })
+  fullName: string;
 
-  @Column({ type: 'varchar', length: 45 })
-  institucion_telefono: string;
+  @Column({
+    name: 'institucion_prefijo',
+    type: 'varchar',
+    length: 5,
+    nullable: true,
+  })
+  prefix: string;
 
-  @Column({ type: 'varchar', length: 45 })
-  institucion_correo: string;
+  @Column({
+    name: 'institucion_descripcion',
+    type: 'varchar',
+    length: 500,
+  })
+  description: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
-  institucion_logo: string;
+  @Column({
+    name: 'institucion_slogan',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
+  slogan: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
-  institucion_logo_grises: string;
+  @Column({
+    name: 'institucion_mision',
+    type: 'varchar',
+    length: 300,
+    nullable: true,
+  })
+  mission: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
-  institucion_logo_solo: string;
+  @Column({
+    name: 'institucion_vision',
+    type: 'varchar',
+    length: 300,
+    nullable: true,
+  })
+  vision: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  institucion_slogan: string;
+  @Column({
+    name: 'institucion_telefono',
+    type: 'varchar',
+    length: 45,
+  })
+  phone: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
-  institucion_mision: string;
+  @Column({
+    name: 'institucion_telefono_secundario',
+    type: 'varchar',
+    length: 15,
+    nullable: true,
+  })
+  phoneSecondary: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
-  institucion_vision: string;
+  @Column({
+    name: 'institucion_telefono_soporte',
+    type: 'varchar',
+    length: 15,
+    nullable: true,
+  })
+  phoneSupport: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
-  institucion_vista_certificado: string;
+  @Column({
+    name: 'institucion_correo',
+    type: 'varchar',
+    length: 45,
+  })
+  email: string;
 
-  @Column({ type: 'tinyint' })
-  institucion_estado: number;
+  @Column({
+    name: 'institucion_correo_soporte',
+    type: 'varchar',
+    length: 45,
+    nullable: true,
+  })
+  emailSupport: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  institucion_imagen_referencial: string;
+  @Column({
+    name: 'institucion_instagram',
+    type: 'varchar',
+    length: 300,
+    nullable: true,
+  })
+  instagram: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  institucion_facebook: string;
+  @Column({
+    name: 'institucion_whatsapp',
+    type: 'varchar',
+    length: 300,
+    nullable: true,
+  })
+  whatsapp: string;
 
-  @Column({ type: 'varchar', length: 15, nullable: true })
-  institucion_telefono_secundario: string;
+  @Column({
+    name: 'institucion_facebook',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
+  facebook: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
-  institucion_instagram: string;
+  @Column({
+    name: 'institucion_tiktok',
+    type: 'varchar',
+    length: 300,
+    nullable: true,
+  })
+  tiktok: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
-  institucion_whatsapp: string;
+  @Column({
+    name: 'institucion_logo',
+    type: 'varchar',
+    length: 500,
+    nullable: true,
+  })
+  logo: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
-  institucion_tiktok: string;
+  @Column({
+    name: 'institucion_logo_grises',
+    type: 'varchar',
+    length: 500,
+    nullable: true,
+  })
+  logoGray: string;
 
-  @Column({ type: 'varchar', length: 45, nullable: true })
-  institucion_correo_soporte: string;
+  @Column({
+    name: 'institucion_logo_solo',
+    type: 'varchar',
+    length: 500,
+    nullable: true,
+  })
+  logoIcon: string;
 
-  @Column({ type: 'varchar', length: 5, nullable: true })
-  institucion_prefijo: string;
+  @Column({
+    name: 'institucion_vista_certificado',
+    type: 'varchar',
+    length: 500,
+    nullable: true,
+  })
+  certificatePreview: string;
 
-  @Column({ type: 'varchar', length: 15, nullable: true })
-  institucion_telefono_soporte: string;
+  @Column({
+    name: 'institucion_imagen_referencial',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  imageReference: string;
 
-  @Column({ type: 'int', nullable: true })
-  autor_id: number;
+  @Column({
+    name: 'autor_id',
+    type: 'int',
+    nullable: true,
+  })
+  authorId: number;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  institucion_autor_rol: string;
+  @Column({
+    name: 'institucion_autor_rol',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  authorRole: string;
 
-  @OneToMany(() => Course, (course) => course.institucion)
+  @OneToMany(() => Course, (course) => course.company)
   cursos: Course[];
 }

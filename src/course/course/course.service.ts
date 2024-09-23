@@ -24,44 +24,44 @@ export class CourseService {
     state,
     type,
   }: FindCourseDto) {
-    const [cursos, total] = await this.courseRepository.findAndCount({
+    const [courses, total] = await this.courseRepository.findAndCount({
       where: {
-        curso_estado: state,
-        curso_modalidad: modality,
-        curso_tipo: type,
+        state: state,
+        modality: modality,
+        type: type,
         ...(published && {
-          curso_fecha_inicio_publicacion: LessThan(new Date()),
-          curso_fecha_fin_publicacion: MoreThan(new Date()),
+          publicationStartDate: LessThan(new Date()),
+          publicationEndDate: MoreThan(new Date()),
         }),
 
-        institucion: {
-          institucion_nombre: company,
+        company: {
+          name: company,
         },
-        categoria: {
-          categoria_curso_nombre: category,
+        category: {
+          name: category,
         },
       },
       take: limit,
       skip: offset,
     });
-    return { total, cursos };
+    return { total, courses };
   }
 
   async findOne(id: number, { company, published, state }: FindOneCourseDto) {
     try {
-      const [curso] = await this.courseRepository.findBy({
-        curso_id: id,
-        curso_estado: state,
+      const [course] = await this.courseRepository.findBy({
+        id: id,
+        state: state,
         ...(published && {
-          curso_fecha_inicio_publicacion: LessThan(new Date()),
-          curso_fecha_fin_publicacion: MoreThan(new Date()),
+          publicationStartDate: LessThan(new Date()),
+          publicationEndDate: MoreThan(new Date()),
         }),
-        institucion: {
-          institucion_nombre: company,
+        company: {
+          name: company,
         },
       });
-      if (!curso) throw new NotFoundException('No se encontro el curso');
-      return curso;
+      if (!course) throw new NotFoundException('No se encontro el curso');
+      return course;
     } catch (error) {
       console.error(error);
       throw error;
