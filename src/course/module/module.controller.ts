@@ -22,18 +22,20 @@ export class ModuleController {
   //   return this.moduleService.create(createModuleDto);
   // }
 
-  @Get()
-  findAll(@Query() findModuleDto: FindModuleDto) {
-    return this.moduleService.findAll(findModuleDto);
-  }
+  // * Implementado
+  // @Get()
+  // findAll(@Query() findModuleDto: FindModuleDto) {
+  //   return this.moduleService.findAll(findModuleDto);
+  // }
 
-  @Get(':id')
-  findOne(
-    @Param('id') id: number,
-    @Query() findOneModuleDto: FindOneModuleDto,
-  ) {
-    return this.moduleService.findOne(+id, findOneModuleDto);
-  }
+  // * Implementado
+  // @Get(':id')
+  // findOne(
+  //   @Param('id') id: number,
+  //   @Query() findOneModuleDto: FindOneModuleDto,
+  // ) {
+  //   return this.moduleService.findOne(+id, findOneModuleDto);
+  // }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateModuleDto: UpdateModuleDto) {

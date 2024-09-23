@@ -24,15 +24,17 @@ export class SessionController {
   //   return this.sessionService.create(createSessionDto);
   // }
 
-  @Get()
-  findAll(@Query() findSessionDto: FindSessionDto) {
-    return this.sessionService.findAll(findSessionDto);
-  }
+  // * Implementado
+  // @Get()
+  // findAll(@Query() findSessionDto: FindSessionDto) {
+  //   return this.sessionService.findAll(findSessionDto);
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sessionService.findOne(+id);
-  }
+  // * Implementado
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.sessionService.findOne(+id);
+  // }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateSessionDto: UpdateSessionDto) {

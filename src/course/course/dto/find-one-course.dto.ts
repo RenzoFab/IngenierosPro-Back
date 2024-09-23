@@ -19,4 +19,19 @@ export class FindOneCourseDto {
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
   published?: boolean = true;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true')
+  modules?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true')
+  blockModules?: boolean;
+
+  // @IsOptional()
+  // @IsBoolean()
+  // @Transform(({ value }) => value === 'true')
+  // sessions?: boolean;
 }

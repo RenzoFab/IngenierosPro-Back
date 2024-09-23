@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from './entities/course.entity';
-import { LessThan, MoreThan, Repository } from 'typeorm';
+import { FindOptionsWhere, LessThan, MoreThan, Repository } from 'typeorm';
 import { FindCourseDto, FindOneCourseDto } from './dto';
+import { ModuleStatus } from '../module/enum/module.enum';
+import { SessionStatus } from '../session/enum/session.enum';
 
 @Injectable()
 export class CourseService {
@@ -47,19 +49,43 @@ export class CourseService {
     return { total, courses };
   }
 
-  async findOne(id: number, { company, published, state }: FindOneCourseDto) {
+  async findOne(
+    id: number,
+    { company, published, state, modules }: FindOneCourseDto,
+  ) {
     try {
-      const [course] = await this.courseRepository.findBy({
+      const currentDate = new Date();
+      const relations: string[] = [];
+      const whereOptions: FindOptionsWhere<Course> = {
         id: id,
         state: state,
         ...(published && {
-          publicationStartDate: LessThan(new Date()),
-          publicationEndDate: MoreThan(new Date()),
+          publicationStartDate: LessThan(currentDate),
+          publicationEndDate: MoreThan(currentDate),
         }),
         company: {
           name: company,
         },
+      };
+      if (modules) {
+        relations.push('modules');
+        whereOptions.modules = { state: ModuleStatus.Active };
+        // if (sessions) {
+        relations.push('modules.sessions');
+        whereOptions.modules.sessions = { state: SessionStatus.Active };
+        // }
+      }
+      const [course] = await this.courseRepository.find({
+        relations,
+        where: whereOptions,
       });
+
+      if (course && course.modules.length > 0 && modules)
+        course.modules.forEach((module) => {
+          module.sessions.map((session) => ({
+            name: session.name,
+          }));
+        });
       if (!course) throw new NotFoundException('No se encontro el curso');
       return course;
     } catch (error) {
