@@ -5,6 +5,8 @@ import { CourseModule } from './course/course/course.module';
 import { ModuleModule } from './course/module/module.module';
 import { SessionModule } from './course/session/session.module';
 import { EvaluationModule } from './course/evaluation/evaluation.module';
+import { MaterialModule } from './course/material/material.module';
+import { TaskModule } from './course/task/task.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { EvaluationModule } from './course/evaluation/evaluation.module';
     ModuleModule,
     SessionModule,
     EvaluationModule,
+    MaterialModule,
+    TaskModule,
   ],
   controllers: [],
   providers: [],

@@ -10,6 +10,8 @@ import {
 import { ModuleStatus } from '../enum/module.enum';
 import { Session } from 'src/course/session/entities/session.entity';
 import { Evaluation } from 'src/course/evaluation/entities/evaluation.entity';
+import { Material } from 'src/course/material/entities/material.entity';
+import { Task } from 'src/course/task/entities/task.entity';
 
 @Entity('tbl_modulo')
 export class Module {
@@ -45,4 +47,10 @@ export class Module {
 
   @OneToMany(() => Evaluation, (evaluation) => evaluation.module)
   evaluations: Evaluation[];
+
+  @OneToMany(() => Material, (material) => material.module)
+  materials: Material[];
+
+  @OneToMany(() => Task, (task) => task.module)
+  task: Task[];
 }

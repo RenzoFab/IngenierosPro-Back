@@ -12,15 +12,15 @@ export class EvaluationController {
   //   return this.evaluationService.create(createEvaluationDto);
   // }
 
-  @Get()
-  findAll() {
-    return this.evaluationService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.evaluationService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.evaluationService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.evaluationService.findOne(+id);
+  // }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateEvaluationDto: UpdateEvaluationDto) {

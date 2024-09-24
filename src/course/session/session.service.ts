@@ -16,21 +16,21 @@ export class SessionService {
   //   return 'This action adds a new session';
   // }
 
-  async findAll({ moduleId, state }: FindSessionDto) {
-    const sessions = await this.sessionRepository.find({
-      where: {
-        moduleId,
-        state,
-      },
-      take: moduleId ? undefined : 20,
-    });
-    return sessions;
-  }
+  // async findAll({ moduleId, state }: FindSessionDto) {
+  //   const sessions = await this.sessionRepository.find({
+  //     where: {
+  //       moduleId,
+  //       state,
+  //     },
+  //     take: moduleId ? undefined : 20,
+  //   });
+  //   return sessions;
+  // }
 
-  async findOne(id: number) {
-    const [session] = await this.sessionRepository.findBy({ id });
-    return session;
-  }
+  // async findOne(id: number) {
+  //   const [session] = await this.sessionRepository.findBy({ id });
+  //   return session;
+  // }
 
   // update(id: number, updateSessionDto: UpdateSessionDto) {
   //   return `This action updates a #${id} session`;
