@@ -2,6 +2,7 @@ import { Agreement } from 'src/company/agreement/entities/agreement.entity';
 import { Banner } from 'src/company/banner/entities/banner.entity';
 import { Course } from 'src/course/course/entities/course.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { CompanyStatus } from '../enum/company.enum';
 
 @Entity('tbl_institucion')
 export class Company {
@@ -12,7 +13,7 @@ export class Company {
     name: 'institucion_estado',
     type: 'tinyint',
   })
-  state: number;
+  state: CompanyStatus;
 
   @Column({
     name: 'institucion_nombre',
@@ -162,36 +163,40 @@ export class Company {
   })
   logoIcon: string;
 
-  @Column({
-    name: 'institucion_vista_certificado',
-    type: 'varchar',
-    length: 500,
-    nullable: true,
-  })
-  certificatePreview: string;
+  // ! NO SE USA
+  // @Column({
+  //   name: 'institucion_vista_certificado',
+  //   type: 'varchar',
+  //   length: 500,
+  //   nullable: true,
+  // })
+  // certificatePreview: string;
 
-  @Column({
-    name: 'institucion_imagen_referencial',
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-  })
-  imageReference: string;
+  // ! NO SE USA
+  // @Column({
+  //   name: 'institucion_imagen_referencial',
+  //   type: 'varchar',
+  //   length: 255,
+  //   nullable: true,
+  // })
+  // imageReference: string;
 
-  @Column({
-    name: 'autor_id',
-    type: 'int',
-    nullable: true,
-  })
-  authorId: number;
+  // ! NO SE USA
+  // @Column({
+  //   name: 'autor_id',
+  //   type: 'int',
+  //   nullable: true,
+  // })
+  // authorId: number;
 
-  @Column({
-    name: 'institucion_autor_rol',
-    type: 'varchar',
-    length: 50,
-    nullable: true,
-  })
-  authorRole: string;
+  // ! NO SE USA
+  // @Column({
+  //   name: 'institucion_autor_rol',
+  //   type: 'varchar',
+  //   length: 50,
+  //   nullable: true,
+  // })
+  // authorRole: string;
 
   @OneToMany(() => Course, (course) => course.company)
   cursos: Course[];
