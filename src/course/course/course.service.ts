@@ -11,7 +11,7 @@ import {
 import { FindCourseDto, FindOneCourseDto } from './dto';
 import { ModuleStatus } from '../module/enum/module.enum';
 import { SessionStatus } from '../session/enum/session.enum';
-import { CourseState } from './enum/course.enum';
+import { CourseOrder, CourseState } from './enum/course.enum';
 
 @Injectable()
 export class CourseService {
@@ -32,11 +32,35 @@ export class CourseService {
     published,
     state,
     type,
+    order,
+    difficulty,
   }: FindCourseDto) {
+    let orderBy: FindOptionsOrder<Course>;
+    switch (order) {
+      case CourseOrder.Newest:
+        orderBy = { publicationStartDate: 'DESC' };
+        break;
+      case CourseOrder.Oldest:
+        orderBy = { publicationStartDate: 'ASC' };
+        break;
+      case CourseOrder.Cheapest:
+        orderBy = { pricePen: 'ASC' };
+        break;
+      case CourseOrder.Expensive:
+        orderBy = { pricePen: 'DESC' };
+        break;
+      case CourseOrder.AtoZ:
+        orderBy = { name: 'ASC' };
+        break;
+      case CourseOrder.ZtoA:
+        orderBy = { name: 'DESC' };
+        break;
+    }
     const where: FindOptionsWhere<Course> = {
-      state: state,
-      modality: modality,
-      type: type,
+      state,
+      modality,
+      difficulty,
+      type,
       ...(published && {
         publicationStartDate: LessThan(new Date()),
         publicationEndDate: MoreThan(new Date()),
@@ -53,6 +77,7 @@ export class CourseService {
       where,
       take: limit,
       skip: offset,
+      order: orderBy,
     });
     return { total, courses };
   }

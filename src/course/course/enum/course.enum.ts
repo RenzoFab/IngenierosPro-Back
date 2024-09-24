@@ -20,3 +20,12 @@ export enum CourseDifficulty {
   Intermedio = 'Intermedio',
   Avanzado = 'Avanzado',
 }
+
+export enum CourseOrder {
+  Newest = 'newest',
+  Oldest = 'oldest',
+  Cheapest = 'cheapest',
+  Expensive = 'expensive',
+  AtoZ = 'a_to_z',
+  ZtoA = 'z_to_a',
+}

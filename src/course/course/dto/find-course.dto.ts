@@ -8,7 +8,13 @@ import {
 
 import { Transform, Type } from 'class-transformer';
 import { FindOneCourseDto } from './find-one-course.dto';
-import { CourseModality, CourseState, CourseType } from '../enum/course.enum';
+import {
+  CourseDifficulty,
+  CourseModality,
+  CourseOrder,
+  CourseState,
+  CourseType,
+} from '../enum/course.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class FindCourseDto {
@@ -36,9 +42,18 @@ export class FindCourseDto {
   type?: CourseType;
 
   @IsOptional()
+  @IsEnum(CourseDifficulty)
+  difficulty?: CourseDifficulty;
+
+  @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
   published?: boolean = true;
+
+  @IsOptional()
+  @IsString()
+  @IsEnum(CourseOrder)
+  order?: CourseOrder;
 
   @IsOptional()
   @IsNumber()
