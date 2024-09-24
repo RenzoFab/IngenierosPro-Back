@@ -10,6 +10,7 @@ import { TaskModule } from './course/task/task.module';
 import { BannerModule } from './company/banner/banner.module';
 import { CompanyModule } from './company/company/company.module';
 import { AgreementModule } from './company/agreement/agreement.module';
+import { TeacherModule } from './course/teacher/teacher.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AgreementModule } from './company/agreement/agreement.module';
     EvaluationModule,
     MaterialModule,
     TaskModule,
+    TeacherModule,
   ],
   controllers: [],
   providers: [],

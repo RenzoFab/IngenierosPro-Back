@@ -3,6 +3,7 @@ import { Banner } from 'src/company/banner/entities/banner.entity';
 import { Course } from 'src/course/course/entities/course.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { CompanyStatus } from '../enum/company.enum';
+import { Teacher } from 'src/course/teacher/entities/teacher.entity';
 
 @Entity('tbl_institucion')
 export class Company {
@@ -206,4 +207,7 @@ export class Company {
 
   @OneToMany(() => Agreement, (agreement) => agreement.company)
   agreements: Agreement[];
+
+  @OneToMany(() => Teacher, (teacher) => teacher.company)
+  teachers: Teacher[];
 }
