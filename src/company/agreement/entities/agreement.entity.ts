@@ -6,6 +6,7 @@ import {
   JoinColumn,
   Entity,
 } from 'typeorm';
+import { AgreementStatus } from '../enum/agreement.enum';
 
 @Entity('tbl_convenio')
 export class Agreement {
@@ -27,7 +28,7 @@ export class Agreement {
   image: string;
 
   @Column({ name: 'convenio_estado', type: 'tinyint', default: 1 })
-  state: number;
+  state: AgreementStatus;
 
   @Column({ name: 'institucion_id', type: 'tinyint', nullable: false })
   companyId: number;

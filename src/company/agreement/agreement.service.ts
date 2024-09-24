@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAgreementDto } from './dto/create-agreement.dto';
-import { UpdateAgreementDto } from './dto/update-agreement.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { Agreement } from './entities/agreement.entity';
+import { FindAgreementDto } from './dto';
 
 @Injectable()
 export class AgreementService {
-  create(createAgreementDto: CreateAgreementDto) {
-    return 'This action adds a new agreement';
+  constructor(
+    @InjectRepository(Agreement)
+    private agreeementRepository: Repository<Agreement>,
+  ) {}
+
+  // create(createAgreementDto: CreateAgreementDto) {
+  //   return 'This action adds a new agreement';
+  // }
+
+  async findAll({ company, state }: FindAgreementDto) {
+    const agreements = await this.agreeementRepository.find({
+      where: {
+        state,
+        company: {
+          name: company,
+        },
+      },
+    });
+    return agreements;
   }
 
-  findAll() {
-    return `This action returns all agreement`;
-  }
+  // async findOne(id: number) {
+  //   const [agreement] = await this.agreeementRepository.findBy({ id });
+  //   return agreement;
+  // }
 
-  findOne(id: number) {
-    return `This action returns a #${id} agreement`;
-  }
+  // update(id: number, updateAgreementDto: UpdateAgreementDto) {
+  //   return `This action updates a #${id} agreement`;
+  // }
 
-  update(id: number, updateAgreementDto: UpdateAgreementDto) {
-    return `This action updates a #${id} agreement`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} agreement`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} agreement`;
+  // }
 }

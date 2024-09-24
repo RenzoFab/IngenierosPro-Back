@@ -1,34 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { AgreementService } from './agreement.service';
-import { CreateAgreementDto } from './dto/create-agreement.dto';
-import { UpdateAgreementDto } from './dto/update-agreement.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { FindAgreementDto } from './dto';
 
+@ApiTags('Agreement')
 @Controller('agreement')
 export class AgreementController {
   constructor(private readonly agreementService: AgreementService) {}
 
-  @Post()
-  create(@Body() createAgreementDto: CreateAgreementDto) {
-    return this.agreementService.create(createAgreementDto);
-  }
+  // @Post()
+  // create(@Body() createAgreementDto: CreateAgreementDto) {
+  //   return this.agreementService.create(createAgreementDto);
+  // }
 
   @Get()
-  findAll() {
-    return this.agreementService.findAll();
+  findAll(@Query() findAgreementDto: FindAgreementDto) {
+    return this.agreementService.findAll(findAgreementDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.agreementService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.agreementService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAgreementDto: UpdateAgreementDto) {
-    return this.agreementService.update(+id, updateAgreementDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateAgreementDto: UpdateAgreementDto) {
+  //   return this.agreementService.update(+id, updateAgreementDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.agreementService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.agreementService.remove(+id);
+  // }
 }
