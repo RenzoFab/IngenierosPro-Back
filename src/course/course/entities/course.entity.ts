@@ -6,7 +6,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Company } from './company.entiity';
 import { Category } from './category.entity';
 import {
   CourseDifficulty,
@@ -15,6 +14,7 @@ import {
   CourseModality,
 } from '../enum/course.enum';
 import { Module } from 'src/course/module/entities/module.entity';
+import { Company } from 'src/company/company/entities/company.entity';
 
 @Entity('tbl_curso')
 export class Course {

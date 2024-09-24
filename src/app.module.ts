@@ -7,6 +7,9 @@ import { SessionModule } from './course/session/session.module';
 import { EvaluationModule } from './course/evaluation/evaluation.module';
 import { MaterialModule } from './course/material/material.module';
 import { TaskModule } from './course/task/task.module';
+import { BannerModule } from './company/banner/banner.module';
+import { CompanyModule } from './company/company/company.module';
+import { AgreementModule } from './company/agreement/agreement.module';
 
 @Module({
   imports: [
@@ -30,6 +33,9 @@ import { TaskModule } from './course/task/task.module';
     EvaluationModule,
     MaterialModule,
     TaskModule,
+    BannerModule,
+    CompanyModule,
+    AgreementModule,
   ],
   controllers: [],
   providers: [],
