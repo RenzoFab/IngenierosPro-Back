@@ -51,7 +51,7 @@ export class CourseService {
 
   async findOne(
     id: number,
-    { company, published, state, modules }: FindOneCourseDto,
+    { company, published, state, modules, sessions }: FindOneCourseDto,
   ) {
     try {
       const currentDate = new Date();
@@ -70,22 +70,16 @@ export class CourseService {
       if (modules) {
         relations.push('modules');
         whereOptions.modules = { state: ModuleStatus.Active };
-        // if (sessions) {
-        relations.push('modules.sessions');
-        whereOptions.modules.sessions = { state: SessionStatus.Active };
-        // }
+        if (sessions) {
+          relations.push('modules.sessions');
+          whereOptions.modules.sessions = { state: SessionStatus.Active };
+        }
       }
       const [course] = await this.courseRepository.find({
         relations,
         where: whereOptions,
       });
 
-      if (course && course.modules.length > 0 && modules)
-        course.modules.forEach((module) => {
-          module.sessions.map((session) => ({
-            name: session.name,
-          }));
-        });
       if (!course) throw new NotFoundException('No se encontro el curso');
       return course;
     } catch (error) {

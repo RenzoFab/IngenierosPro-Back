@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { ModuleStatus } from '../enum/module.enum';
 import { Session } from 'src/course/session/entities/session.entity';
+import { Evaluation } from 'src/course/evaluation/entities/evaluation.entity';
 
 @Entity('tbl_modulo')
 export class Module {
@@ -41,4 +42,7 @@ export class Module {
 
   @OneToMany(() => Session, (session) => session.module)
   sessions: Session[];
+
+  @OneToMany(() => Evaluation, (evaluation) => evaluation.module)
+  evaluations: Evaluation[];
 }

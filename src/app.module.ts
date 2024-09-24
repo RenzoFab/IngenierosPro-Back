@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CourseModule } from './course/course/course.module';
 import { ModuleModule } from './course/module/module.module';
 import { SessionModule } from './course/session/session.module';
+import { EvaluationModule } from './course/evaluation/evaluation.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SessionModule } from './course/session/session.module';
     CourseModule,
     ModuleModule,
     SessionModule,
+    EvaluationModule,
   ],
   controllers: [],
   providers: [],
