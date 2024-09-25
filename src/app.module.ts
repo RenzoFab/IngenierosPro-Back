@@ -1,15 +1,17 @@
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { AgreementModule } from './company/agreement/agreement.module';
+import { BannerModule } from './company/banner/banner.module';
+import { CertificateModule } from './certificate/certificate.module';
+import { CompanyModule } from './company/company/company.module';
 import { CourseModule } from './course/course/course.module';
-import { ModuleModule } from './course/module/module.module';
-import { SessionModule } from './course/session/session.module';
 import { EvaluationModule } from './course/evaluation/evaluation.module';
 import { MaterialModule } from './course/material/material.module';
+import { ModuleModule } from './course/module/module.module';
+import { SessionModule } from './course/session/session.module';
 import { TaskModule } from './course/task/task.module';
-import { BannerModule } from './company/banner/banner.module';
-import { CompanyModule } from './company/company/company.module';
-import { AgreementModule } from './company/agreement/agreement.module';
 import { TeacherModule } from './course/teacher/teacher.module';
 
 @Module({
@@ -38,6 +40,7 @@ import { TeacherModule } from './course/teacher/teacher.module';
     MaterialModule,
     TaskModule,
     TeacherModule,
+    CertificateModule,
   ],
   controllers: [],
   providers: [],
