@@ -1,6 +1,7 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ExternalCertificateService } from './external-certificate.service';
 import { ApiTags } from '@nestjs/swagger';
+import { FindExternalCertificateDto } from './dto';
 
 @ApiTags('External-certificate')
 @Controller('external-certificate')
@@ -15,8 +16,8 @@ export class ExternalCertificateController {
   // }
 
   // @Get()
-  // findAll() {
-  //   return this.externalCertificateService.findAll();
+  // findAll(@Query() findExternalCertificateDto: FindExternalCertificateDto) {
+  //   return this.externalCertificateService.findAll(findExternalCertificateDto);
   // }
 
   // @Get(':id')
