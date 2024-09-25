@@ -1,12 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Teacher } from './entities/teacher.entity';
-import { In, Not, Repository } from 'typeorm';
+import {
+  FindOptionsSelect,
+  FindOptionsWhere,
+  In,
+  Not,
+  Repository,
+} from 'typeorm';
 import { CourseState } from '../course/enum/course.enum';
 import { FindTeacherDto } from './dto/find-teacher.dto';
 import { Achievement } from './entities/achievement.entity';
 import { FindAchievementDto } from './dto/find-achievement.dto';
 import { AchievementType } from './enum/achievement.enum';
+import { FindOneTeacherDto } from './dto/find-one-teacher.dto';
 
 @Injectable()
 export class TeacherService {
@@ -26,11 +33,11 @@ export class TeacherService {
       .leftJoin('teacher.user', 'user')
       .leftJoin('teacher.courses', 'courses')
       .select([
-        'teacher.id',
-        'user.firstName',
-        'user.lastName',
-        'user.image',
-        'user.occupation',
+        'teacher.id as id',
+        'user.firstName as firstName',
+        'user.lastName as lastName',
+        'user.image as image',
+        'user.occupation as occupation',
         'COUNT(courses.id) AS courseCount',
       ])
       .where('user.status = :status', { status: 1 })
@@ -49,20 +56,35 @@ export class TeacherService {
     return teachers;
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, { courses }: FindOneTeacherDto) {
     try {
-      const [teacher] = await this.teacherRepository.find({
-        relations: ['user', 'courses'],
-        where: {
-          id,
-          user: {
-            status: 1,
-            firstName: Not(In(['--', '', ' '])),
-          },
-          courses: {
-            state: CourseState.Activo,
-          },
+      const relations: string[] = ['user'];
+      const select: FindOptionsSelect<Teacher> = {
+        user: {
+          firstName: true,
+          lastName: true,
+          academicDegree: true,
+          image: true,
+          occupation: true,
         },
+      };
+      const where: FindOptionsWhere<Teacher> = {
+        id,
+        user: {
+          status: 1,
+          firstName: Not(In(['--', '', ' '])),
+        },
+      };
+      if (courses) {
+        relations.push('courses');
+        where.courses = {
+          state: CourseState.Activo,
+        };
+      }
+      const [teacher] = await this.teacherRepository.find({
+        relations,
+        select,
+        where,
       });
       if (!teacher)
         throw new NotFoundException(`No se encontro docente con id "${id}"`);

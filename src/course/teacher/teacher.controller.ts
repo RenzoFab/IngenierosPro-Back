@@ -2,6 +2,7 @@ import { Controller, Get, Param, Query } from '@nestjs/common';
 import { TeacherService } from './teacher.service';
 import { ApiTags } from '@nestjs/swagger';
 import { FindTeacherDto } from './dto';
+import { FindOneTeacherDto } from './dto/find-one-teacher.dto';
 
 @ApiTags('Teacher')
 @Controller('teacher')
@@ -19,8 +20,11 @@ export class TeacherController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.teacherService.findOne(+id);
+  findOne(
+    @Param('id') id: number,
+    @Query() findOneTeacherDto: FindOneTeacherDto,
+  ) {
+    return this.teacherService.findOne(id, findOneTeacherDto);
   }
 
   // @Patch(':id')
