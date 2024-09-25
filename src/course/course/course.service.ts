@@ -130,7 +130,8 @@ export class CourseService {
         where,
         order,
       });
-      if (!course) throw new NotFoundException('No se encontro el curso');
+      if (!course)
+        throw new NotFoundException(`No se encontro el curso con id "${id}"`);
       return course;
     } catch (error) {
       console.error(error);

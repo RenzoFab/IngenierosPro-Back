@@ -4,10 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+import { Course } from 'src/course/course/entities/course.entity';
 
 @Entity('tbl_docente')
 export class Teacher {
@@ -47,6 +49,9 @@ export class Teacher {
   //     nullable: true,
   //   })
   //   canCreateCoupon: boolean;
+
+  @OneToMany(() => Course, (course) => course.teacher)
+  courses: Course[];
 
   @ManyToOne(() => Company, (company) => company.teachers)
   @JoinColumn({ name: 'institucion_id' })

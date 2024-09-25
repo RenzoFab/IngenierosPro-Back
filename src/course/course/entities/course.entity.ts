@@ -15,6 +15,7 @@ import {
 } from '../enum/course.enum';
 import { Module } from 'src/course/module/entities/module.entity';
 import { Company } from 'src/company/company/entities/company.entity';
+import { Teacher } from 'src/course/teacher/entities/teacher.entity';
 
 @Entity('tbl_curso')
 export class Course {
@@ -184,6 +185,10 @@ export class Course {
   @ManyToOne(() => Category, (category) => category.courses)
   @JoinColumn({ name: 'categoria_curso_id' })
   category: Category;
+
+  @ManyToOne(() => Teacher, (teacher) => teacher.courses)
+  @JoinColumn({ name: 'docente_id' })
+  teacher: Teacher;
 
   @OneToMany(() => Module, (module) => module.course)
   modules: Module[];

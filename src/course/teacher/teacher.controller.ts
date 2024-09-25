@@ -1,6 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { TeacherService } from './teacher.service';
 import { ApiTags } from '@nestjs/swagger';
+import { FindTeacherDto } from './dto';
 
 @ApiTags('Teacher')
 @Controller('teacher')
@@ -13,8 +14,8 @@ export class TeacherController {
   // }
 
   @Get()
-  findAll() {
-    return this.teacherService.findAll();
+  findAll(@Query() findTeacherDto: FindTeacherDto) {
+    return this.teacherService.findAll(findTeacherDto);
   }
 
   @Get(':id')
