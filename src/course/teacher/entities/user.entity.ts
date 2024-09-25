@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Teacher } from './teacher.entity';
+import { Student } from './student.entity';
 
 @Entity('tbl_usuario')
 export class User {
@@ -134,6 +135,10 @@ export class User {
 
   @OneToOne(() => Teacher, (teacher) => teacher.user)
   teachers: Teacher[];
+
+  @OneToOne(() => Student, (student) => student.user)
+  @JoinColumn({ name: 'usuario_id' })
+  student: Student;
 
   //   @ManyToOne(() => Role, (role) => role.users)
   //   @JoinColumn({ name: 'rol_id' })

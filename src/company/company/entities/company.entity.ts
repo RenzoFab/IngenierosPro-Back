@@ -4,7 +4,8 @@ import { Course } from 'src/course/course/entities/course.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { CompanyStatus } from '../enum/company.enum';
 import { Teacher } from 'src/course/teacher/entities/teacher.entity';
-import { ExternalCertificate } from 'src/certificate/entities/external-certificate.entitiy';
+import { Student } from 'src/course/teacher/entities/student.entity';
+import { ExternalCertificate } from 'src/certificate/external-certificate/entities/external-certificate.entity';
 
 @Entity('tbl_institucion')
 export class Company {
@@ -211,6 +212,9 @@ export class Company {
 
   @OneToMany(() => Teacher, (teacher) => teacher.company)
   teachers: Teacher[];
+
+  @OneToMany(() => Student, (student) => student.company)
+  students: Student[];
 
   @OneToMany(
     () => ExternalCertificate,

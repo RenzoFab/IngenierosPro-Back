@@ -1,4 +1,4 @@
-import { Certificate } from 'crypto';
+import { Student } from 'src/course/teacher/entities/student.entity';
 import {
   Column,
   Entity,
@@ -78,7 +78,7 @@ export class OwnCertificate {
   //   @JoinColumn({ name: 'certificado_id' })
   //   certificate: Certificate;
 
-  //   @ManyToOne(() => Student, (student) => student.internalCertificates)
-  //   @JoinColumn({ name: 'estudiante_id' })
-  //   student: Student;
+  @ManyToOne(() => Student, (student) => student.ownCertificates)
+  @JoinColumn({ name: 'estudiante_id' })
+  student: Student;
 }
