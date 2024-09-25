@@ -14,10 +14,10 @@ export class ExternalCertificateService {
   //   return 'This action adds a new externalCertificate';
   // }
 
-  findAll({ term }: FindExternalCertificateDto) {
+  findAll({ userIdentityCard }: FindExternalCertificateDto) {
     const certificates = this.externalCertificateRepository.find({
       where: {
-        userIdentityCard: term,
+        userIdentityCard,
       },
     });
     return certificates;
