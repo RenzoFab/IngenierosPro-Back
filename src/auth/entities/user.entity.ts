@@ -7,8 +7,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Teacher } from './teacher.entity';
-import { Student } from './student.entity';
+import { Teacher } from '../../course/teacher/entities/teacher.entity';
+import { Student } from '../../course/teacher/entities/student.entity';
 
 @Entity('tbl_usuario')
 export class User {

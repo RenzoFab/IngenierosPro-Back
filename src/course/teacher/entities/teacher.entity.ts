@@ -8,7 +8,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../../../auth/entities/user.entity';
 import { Course } from 'src/course/course/entities/course.entity';
 
 @Entity('tbl_docente')

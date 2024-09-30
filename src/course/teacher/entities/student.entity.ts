@@ -7,7 +7,7 @@ import {
   Entity,
   OneToMany,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../../../auth/entities/user.entity';
 import { Company } from 'src/company/company/entities/company.entity';
 import { OwnCertificate } from 'src/certificate/own-certificate/entities/own-certificate.entity';
 

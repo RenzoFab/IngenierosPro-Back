@@ -15,6 +15,7 @@ import { TeacherModule } from './course/teacher/teacher.module';
 import { CertificateModule } from './certificate/certificate/certificate.module';
 import { ExternalCertificateModule } from './certificate/external-certificate/external-certificate.module';
 import { OwnCertificateModule } from './certificate/own-certificate/own-certificate.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { OwnCertificateModule } from './certificate/own-certificate/own-certific
     CertificateModule,
     ExternalCertificateModule,
     OwnCertificateModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
