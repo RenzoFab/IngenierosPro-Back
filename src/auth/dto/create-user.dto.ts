@@ -41,11 +41,11 @@ export class CreateUserDto {
 
   @IsString({ message: typeErrorMessage('names', 'string') })
   @MaxLength(150, { message: lengthErrorMessage('names', 'max', 150) })
-  names: string;
+  name: string;
 
   @IsString({ message: typeErrorMessage('surnames', 'string') })
   @MaxLength(150, { message: lengthErrorMessage('surnames', 'max', 150) })
-  surnames: string;
+  lastName: string;
 
   @IsString({ message: typeErrorMessage('country', 'string') })
   @MaxLength(30, { message: lengthErrorMessage('country', 'max', 30) })

@@ -8,7 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Teacher } from '../../course/teacher/entities/teacher.entity';
-import { Student } from '../../course/teacher/entities/student.entity';
+import { Student } from './student.entity';
+import { Role } from './role.entity';
 
 @Entity('tbl_usuario')
 export class User {
@@ -90,13 +91,13 @@ export class User {
   })
   academicDegree: string;
 
-  @Column({
-    name: 'usuario_codigo_activacion',
-    type: 'varchar',
-    length: 20,
-    nullable: true,
-  })
-  activationCode: string;
+  // @Column({
+  //   name: 'usuario_codigo_activacion',
+  //   type: 'varchar',
+  //   length: 20,
+  //   nullable: true,
+  // })
+  // activationCode: string;
 
   @Column({ name: 'usuario_codigo_verificado', type: 'tinyint', default: 0 })
   isVerified: boolean;
@@ -133,6 +134,9 @@ export class User {
   @Column({ name: 'usuario_estado_carnet_identidad', type: 'int', default: 0 })
   idCardStatus: number;
 
+  @Column({ name: 'rol_id', type: 'int' })
+  idRol: number;
+
   @OneToOne(() => Teacher, (teacher) => teacher.user)
   teachers: Teacher[];
 
@@ -140,7 +144,7 @@ export class User {
   @JoinColumn({ name: 'usuario_id' })
   student: Student;
 
-  //   @ManyToOne(() => Role, (role) => role.users)
-  //   @JoinColumn({ name: 'rol_id' })
-  //   role: Role;
+  @ManyToOne(() => Role, (role) => role.users)
+  @JoinColumn({ name: 'rol_id' })
+  role: Role;
 }

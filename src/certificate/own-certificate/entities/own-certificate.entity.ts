@@ -1,4 +1,4 @@
-import { Student } from 'src/course/teacher/entities/student.entity';
+import { Student } from 'src/auth/entities/student.entity';
 import {
   Column,
   Entity,
