@@ -6,6 +6,7 @@ import { CompanyStatus } from '../enum/company.enum';
 import { Teacher } from 'src/course/teacher/entities/teacher.entity';
 import { Student } from 'src/course/teacher/entities/student.entity';
 import { ExternalCertificate } from 'src/certificate/external-certificate/entities/external-certificate.entity';
+import { VerificationCode } from 'src/auth/entities/verification-code.entity';
 
 @Entity('tbl_institucion')
 export class Company {
@@ -221,4 +222,10 @@ export class Company {
     (externalCertificate) => externalCertificate.company,
   )
   externalCertificate: ExternalCertificate[];
+
+  @OneToMany(
+    () => VerificationCode,
+    (verificationCode) => verificationCode.company,
+  )
+  verificationCode: VerificationCode[];
 }
