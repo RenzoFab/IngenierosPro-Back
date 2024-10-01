@@ -141,7 +141,6 @@ export class User {
   teachers: Teacher[];
 
   @OneToOne(() => Student, (student) => student.user)
-  @JoinColumn({ name: 'usuario_id' })
   student: Student;
 
   @ManyToOne(() => Role, (role) => role.users)

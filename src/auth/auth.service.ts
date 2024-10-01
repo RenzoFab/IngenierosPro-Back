@@ -1,8 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto, SendCodeEmailDto } from './dto';
+import { CreateUserDto, LoginDto, SendCodeEmailDto } from './dto';
 import { VerificationCode, User, Student } from './entities';
 
 @Injectable()
@@ -15,6 +19,22 @@ export class AuthService {
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
   ) {}
+
+  async login({ companyId, email, password }: LoginDto) {
+    try {
+      const user = await this.userRepository.findOne({
+        relations: ['student'],
+        where: { email, student: { companyId } },
+      });
+      if (!user) throw new NotFoundException('Usuario no encontrado');
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid)
+        throw new BadRequestException('Contraseña incorrecta');
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async sendCodeEmail({ companyId, email }: SendCodeEmailDto) {
     try {
