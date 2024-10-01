@@ -14,7 +14,7 @@ import { OwnCertificate } from 'src/certificate/own-certificate/entities/own-cer
 @Entity('tbl_estudiante')
 export class Student {
   @PrimaryGeneratedColumn({ name: 'estudiante_id' })
-  studentId: number;
+  id: number;
 
   @Column({
     name: 'estudiante_carrera',
