@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto, LoginDto, SendCodeEmailDto } from './dto';
 import { VerificationCode, User, Student } from './entities';
+import { JwtPayload } from './interfaces/jwt-payload.interfaces';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +20,7 @@ export class AuthService {
     private userRepository: Repository<User>,
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
+    private jwtService: JwtService,
   ) {}
 
   async login({ companyId, email, password }: LoginDto) {
@@ -30,7 +33,15 @@ export class AuthService {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid)
         throw new BadRequestException('Contraseña incorrecta');
-      return user;
+      return {
+        name: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        token: this.getJwtToken({
+          studentId: user.student.id,
+          userId: user.id,
+        }),
+      };
     } catch (error) {
       throw error;
     }
@@ -54,7 +65,9 @@ export class AuthService {
         companyId,
         email,
       });
-      return await this.verificationCodeRepository.save(newVerificationCode);
+      const response =
+        await this.verificationCodeRepository.save(newVerificationCode);
+      return { code: response.code, email: response.email };
     } catch (error) {
       if (error?.errno === 1452) {
         throw new BadRequestException(
@@ -108,9 +121,16 @@ export class AuthService {
         userId: user.id,
       });
       const student = await this.studentRepository.save(newStudent);
-      return { ...user, student };
+      return {
+        name: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        token: this.getJwtToken({
+          studentId: student.id,
+          userId: user.id,
+        }),
+      };
     } catch (error) {
-      console.error(error);
       throw error;
     }
   }
@@ -170,5 +190,9 @@ export class AuthService {
       }
       throw error;
     }
+  }
+
+  private getJwtToken(payload: JwtPayload) {
+    return this.jwtService.sign(payload);
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto, LoginDto, SendCodeEmailDto } from './dto';
@@ -17,7 +17,7 @@ export class AuthController {
     return this.authService.sendCodeEmail(sendCodeEmailDto);
   }
 
-  @Post('register/:company')
+  @Post('register')
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.authService.createUser(createUserDto);
   }
