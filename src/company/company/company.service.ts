@@ -28,7 +28,7 @@ export class CompanyService {
       const [company] = await this.companyRepository.findBy({ name });
       if (!company)
         throw new NotFoundException(
-          `No se encontro el curso con nombre "${name}"`,
+          `No se encontro la empresa con nombre "${name}"`,
         );
       return company;
     } catch (error) {
