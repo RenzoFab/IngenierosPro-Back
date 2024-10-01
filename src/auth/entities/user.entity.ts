@@ -100,7 +100,7 @@ export class User {
   // activationCode: string;
 
   @Column({ name: 'usuario_codigo_verificado', type: 'tinyint', default: 0 })
-  isVerified: boolean;
+  isVerified: number;
 
   @Column({
     name: 'usuario_fecha_creacion',

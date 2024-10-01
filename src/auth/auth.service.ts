@@ -1,12 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { VerificationCode } from './entities/verification-code.entity';
 import { DeepPartial, Repository } from 'typeorm';
-import { User } from './entities/user.entity';
-import { Student } from './entities/student.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Company } from 'src/company/company/entities/company.entity';
+import { CreateUserDto, SendCodeEmailDto } from './dto';
+import { VerificationCode, User, Student } from './entities';
 
 @Injectable()
 export class AuthService {
@@ -17,32 +14,53 @@ export class AuthService {
     private userRepository: Repository<User>,
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
-    @InjectRepository(Company)
-    private companyRepository: Repository<Company>,
   ) {}
 
-  async createUser(
-    company: string,
-    {
-      birthDate,
-      country,
-      email,
-      emailCode,
-      idCard,
-      name,
-      phone,
-      lastName,
-      type,
-      password,
-    }: CreateUserDto,
-  ) {
+  async sendCodeEmail({ companyId, email }: SendCodeEmailDto) {
     try {
-      const [companyDetail] = await this.companyRepository.find({
-        where: { name: company },
+      const verificationCode = await this.verificationCodeRepository.findOne({
+        where: { companyId, email },
       });
-      if (!companyDetail) throw new BadRequestException();
-      await this.isEmailRegister(company, email);
-      await this.isIdCardRegister(idCard, email);
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      if (verificationCode) {
+        if (verificationCode.status === 1) {
+          throw new BadRequestException('El correo ya se encuentra registrado');
+        }
+        verificationCode.code = code;
+        return await this.verificationCodeRepository.save(verificationCode);
+      }
+      const newVerificationCode = this.verificationCodeRepository.create({
+        code,
+        companyId,
+        email,
+      });
+      return await this.verificationCodeRepository.save(newVerificationCode);
+    } catch (error) {
+      if (error?.errno === 1452) {
+        throw new BadRequestException(
+          'La empresa no existe o no se puede asociar con el código de verificación.',
+        );
+      }
+      throw error;
+    }
+  }
+
+  async createUser({
+    birthDate,
+    country,
+    email,
+    emailCode,
+    idCard,
+    name,
+    phone,
+    lastName,
+    type,
+    password,
+    companyId,
+  }: CreateUserDto) {
+    try {
+      await this.isEmailRegister(companyId, email);
+      await this.isIdCardRegister(companyId, idCard);
       let body: DeepPartial<User> = {
         birthDate,
         country,
@@ -54,9 +72,10 @@ export class AuthService {
         createdAt: new Date(),
         phone,
         idRol: 4,
+        isVerified: 1,
       };
       if (type === 'Default') {
-        await this.validateCodeEmail(company, email, emailCode.toString());
+        await this.validateCodeEmail(companyId, email, emailCode.toString());
         body.password = bcrypt.hashSync(password, 10);
       }
 
@@ -64,7 +83,7 @@ export class AuthService {
       const user = await this.userRepository.save(newUser);
 
       const newStudent = this.studentRepository.create({
-        companyId: companyDetail.id,
+        companyId,
         advertising: 1,
         userId: user.id,
       });
@@ -76,28 +95,29 @@ export class AuthService {
     }
   }
 
-  private async isEmailRegister(company: string, email: string) {
+  private async isEmailRegister(companyId: number, email: string) {
     try {
       const [student] = await this.studentRepository.find({
-        where: { user: { email: email }, company: { name: company } },
+        where: { user: { email: email }, companyId },
       });
       if (student)
         throw new BadRequestException(
-          `El correo "${email}" ya esta registrado en ${company}`,
+          `El correo "${email}" ya esta registrado en la empresa "${companyId}"`,
         );
     } catch (error) {
       throw error;
     }
   }
 
-  private async isIdCardRegister(company: string, idCard: string) {
+  private async isIdCardRegister(companyId: number, idCard: string) {
     try {
       const [student] = await this.studentRepository.find({
-        where: { user: { idCard: idCard }, company: { name: company } },
+        where: { user: { idCard: idCard }, companyId },
       });
+      console.log(student);
       if (student)
         throw new BadRequestException(
-          `El carnet de identidad "${idCard}" ya esta registrado en ${company}`,
+          `El carnet de identidad "${idCard}" ya esta registrado en la empresa "${companyId}"`,
         );
     } catch (error) {
       throw error;
@@ -105,29 +125,29 @@ export class AuthService {
   }
 
   private async validateCodeEmail(
-    company: string,
+    companyId: number,
     email: string,
     emailCode: string,
   ) {
     try {
-      const [verificationCode] = await this.verificationCodeRepository.find({
-        select: { code: true },
+      const verificationCode = await this.verificationCodeRepository.findOne({
         where: {
           code: emailCode,
           email: email,
-          company: {
-            name: company,
-          },
+          companyId,
         },
       });
       if (!verificationCode)
         throw new BadRequestException('El código email no es correcto');
-      await this.verificationCodeRepository.update(
-        { code: emailCode, email: email, company: { name: company } },
-        { status: 1 },
-      );
+      verificationCode.status = 1;
+      await this.verificationCodeRepository.save(verificationCode);
       return verificationCode;
     } catch (error) {
+      if (error?.errno === 1452) {
+        throw new BadRequestException(
+          'La empresa no existe o no se puede asociar con el código de verificación.',
+        );
+      }
       throw error;
     }
   }

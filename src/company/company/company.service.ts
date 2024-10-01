@@ -27,10 +27,9 @@ export class CompanyService {
     try {
       const [company] = await this.companyRepository.findBy({ name });
       if (!company)
-        throw new NotFoundException(`La empresa "${company}" no existe`);
+        throw new NotFoundException(`La empresa "${name}" no existe`);
       return company;
     } catch (error) {
-      console.error(error);
       throw error;
     }
   }
