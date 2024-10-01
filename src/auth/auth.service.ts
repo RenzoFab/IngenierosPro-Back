@@ -40,8 +40,7 @@ export class AuthService {
       const [companyDetail] = await this.companyRepository.find({
         where: { name: company },
       });
-      if (!companyDetail)
-        throw new BadRequestException(`La empresa "${company}" no existe`);
+      if (!companyDetail) throw new BadRequestException();
       await this.isEmailRegister(company, email);
       await this.isIdCardRegister(idCard, email);
       let body: DeepPartial<User> = {
