@@ -63,11 +63,6 @@ export class CreateUserDto {
   @MaxLength(30, { message: lengthErrorMessage('phone', 'max', 30) })
   phone: string;
 
-  @IsBoolean({
-    message: typeErrorMessage('advertising', 'boolean'),
-  })
-  advertising: boolean;
-
   @IsString({ message: typeErrorMessage('type', 'string') })
   @IsIn(['Default', 'Google'], {
     message: 'El campo type debe ser Default o Google',

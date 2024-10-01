@@ -24,7 +24,6 @@ export class AuthService {
   async createUser(
     company: string,
     {
-      advertising,
       birthDate,
       country,
       email,
