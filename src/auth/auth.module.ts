@@ -6,7 +6,6 @@ import { User, VerificationCode, Student, Role } from './entities';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
-// import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [AuthController],
@@ -15,8 +14,6 @@ import { JwtStrategy } from './strategy/jwt.strategy';
     TypeOrmModule.forFeature([User, VerificationCode, Student, Role]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
-      // imports: [ConfigModule],
-      // inject: [ConfigService],
       useFactory: () => {
         return {
           secret: process.env.JWT_SECRET,

@@ -16,23 +16,15 @@ import { CertificateModule } from './certificate/certificate/certificate.module'
 import { ExternalCertificateModule } from './certificate/external-certificate/external-certificate.module';
 import { OwnCertificateModule } from './certificate/own-certificate/own-certificate.module';
 import { AuthModule } from './auth/auth.module';
+import { dbConfig, mailConfig } from './config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      autoLoadEntities: true,
-      synchronize: false,
-      logging: true,
-    }),
+    dbConfig(),
+    mailConfig(),
     CompanyModule,
     BannerModule,
     AgreementModule,
