@@ -10,7 +10,10 @@ export class SaleService {
     @InjectRepository(Sale) private saleRepository: Repository<Sale>,
   ) {}
 
-  async findAll({ studentId, status }: FindSaleDto & { studentId: number }) {
+  async findAll({
+    studentId,
+    status,
+  }: FindSaleDto & { studentId: number }): Promise<Partial<Sale>[]> {
     return await this.saleRepository.find({
       select: {
         id: true,
@@ -20,16 +23,29 @@ export class SaleService {
         priceTotal: true,
         pricePEN: true,
         priceUSD: true,
+        status: true,
       },
       where: { studentId, status },
     });
   }
 
-  async findOne(id: number, studentId: number) {
-    const sale = await this.saleRepository.findOneBy({
-      id,
-      status: 1,
-      studentId,
+  async findOne(id: number, studentId: number): Promise<Partial<Sale>> {
+    const sale = await this.saleRepository.findOne({
+      select: {
+        id: true,
+        currency: true,
+        date: true,
+        paymentDate: true,
+        priceTotal: true,
+        pricePEN: true,
+        priceUSD: true,
+        status: true,
+      },
+      where: {
+        id,
+        status: 1,
+        studentId,
+      },
     });
     if (!sale) throw new NotFoundException(`Compra con id ${id} no encontrado`);
     return sale;
