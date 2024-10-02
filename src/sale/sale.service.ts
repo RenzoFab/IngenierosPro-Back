@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindSaleDto } from './dto/find-sale.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Sale } from './entities/sale.entity';
 import { Repository } from 'typeorm';
 
@@ -10,7 +10,7 @@ export class SaleService {
     @InjectRepository(Sale) private saleRepository: Repository<Sale>,
   ) {}
 
-  async findAll({ studentId }: FindSaleDto) {
+  async findAll({ studentId, status }: FindSaleDto & { studentId: number }) {
     return await this.saleRepository.find({
       select: {
         id: true,
@@ -21,11 +21,17 @@ export class SaleService {
         pricePEN: true,
         priceUSD: true,
       },
-      where: { studentId, status: 1 },
+      where: { studentId, status },
     });
   }
 
-  async findOne(id: number) {
-    return await this.saleRepository.findOneBy({ id, status: 1 });
+  async findOne(id: number, studentId: number) {
+    const sale = await this.saleRepository.findOneBy({
+      id,
+      status: 1,
+      studentId,
+    });
+    if (!sale) throw new NotFoundException(`Compra con id ${id} no encontrado`);
+    return sale;
   }
 }

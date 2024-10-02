@@ -17,12 +17,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate({ studentId, userId }: JwtPayload): Promise<User> {
-    const user = await this.userRepository.findOneBy({
-      id: userId,
-      student: { id: studentId },
+  async validate({ studentId, userId }: JwtPayload) {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId,
+        student: { id: studentId },
+      },
     });
     if (!user) throw new UnauthorizedException('Token invalido');
-    return user;
+    delete user.id;
+    return { ...user, studentId, userId };
   }
 }
