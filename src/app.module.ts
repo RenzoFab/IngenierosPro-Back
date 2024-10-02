@@ -16,6 +16,8 @@ import { CertificateModule } from './certificate/certificate/certificate.module'
 import { ExternalCertificateModule } from './certificate/external-certificate/external-certificate.module';
 import { OwnCertificateModule } from './certificate/own-certificate/own-certificate.module';
 import { AuthModule } from './auth/auth.module';
+import { PaymentModule } from './payment/payment.module';
+import { SaleModule } from './sale/sale.module';
 
 @Module({
   imports: [
@@ -47,6 +49,8 @@ import { AuthModule } from './auth/auth.module';
     ExternalCertificateModule,
     OwnCertificateModule,
     AuthModule,
+    PaymentModule,
+    SaleModule,
   ],
   controllers: [],
   providers: [],
