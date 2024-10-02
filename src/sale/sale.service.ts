@@ -3,11 +3,16 @@ import { FindSaleDto } from './dto/find-sale.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Sale } from './entities/sale.entity';
 import { Repository } from 'typeorm';
+import { SaleDetailServiceType } from './enum/sale-detail.enum';
+import { SaleDetail } from './entities/sale-detail.entity';
+import { SaleStatus } from './enum/sale.enum';
 
 @Injectable()
 export class SaleService {
   constructor(
     @InjectRepository(Sale) private saleRepository: Repository<Sale>,
+    @InjectRepository(SaleDetail)
+    private saleDetailRepository: Repository<SaleDetail>,
   ) {}
 
   async findAll({
@@ -31,6 +36,7 @@ export class SaleService {
 
   async findOne(id: number, studentId: number): Promise<Partial<Sale>> {
     const sale = await this.saleRepository.findOne({
+      relations: ['saleDetails'],
       select: {
         id: true,
         currency: true,
@@ -49,5 +55,14 @@ export class SaleService {
     });
     if (!sale) throw new NotFoundException(`Compra con id ${id} no encontrado`);
     return sale;
+  }
+
+  async findOwnCourses(studentId: number) {
+    return this.saleDetailRepository.find({
+      where: {
+        serviceType: SaleDetailServiceType.Course,
+        sale: { studentId, status: SaleStatus.Paid },
+      },
+    });
   }
 }

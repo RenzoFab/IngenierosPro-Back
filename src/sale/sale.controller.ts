@@ -27,4 +27,9 @@ export class SaleController {
   findOne(@Param('id') id: number, @GetUser('studentId') studentId: number) {
     return this.saleService.findOne(id, studentId);
   }
+
+  @Get('courses')
+  findOwnCourses() {
+    return this.saleService.findOwnCourses(2);
+  }
 }

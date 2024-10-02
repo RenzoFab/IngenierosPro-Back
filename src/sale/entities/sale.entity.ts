@@ -5,7 +5,9 @@ import {
   ManyToOne,
   JoinColumn,
   Entity,
+  OneToMany,
 } from 'typeorm';
+import { SaleDetail } from './sale-detail.entity';
 
 @Entity('tbl_compra')
 export class Sale {
@@ -102,6 +104,9 @@ export class Sale {
     type: 'int',
   })
   studentId: number;
+
+  @OneToMany(() => SaleDetail, (saleDetail) => saleDetail.sale)
+  saleDetails: SaleDetail[];
 
   @ManyToOne(() => Student, (student) => student.sales)
   @JoinColumn({ name: 'estudiante_id' })
