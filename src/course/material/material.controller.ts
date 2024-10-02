@@ -12,15 +12,15 @@ export class MaterialController {
   //   return this.materialService.create(createMaterialDto);
   // }
 
-  @Get()
-  findAll() {
-    return this.materialService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.materialService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.materialService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.materialService.findOne(+id);
+  // }
 
   // @Patch(':id')
   // update(
