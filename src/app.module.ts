@@ -17,6 +17,8 @@ import { ExternalCertificateModule } from './certificate/external-certificate/ex
 import { OwnCertificateModule } from './certificate/own-certificate/own-certificate.module';
 import { AuthModule } from './auth/auth.module';
 import { dbConfig, mailConfig } from './config';
+import { PaymentModule } from './payment/payment.module';
+import { SaleModule } from './sale/sale.module';
 
 @Module({
   imports: [
@@ -39,6 +41,8 @@ import { dbConfig, mailConfig } from './config';
     ExternalCertificateModule,
     OwnCertificateModule,
     AuthModule,
+    PaymentModule,
+    SaleModule,
   ],
   controllers: [],
   providers: [],
