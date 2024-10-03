@@ -1,12 +1,12 @@
 import { Agreement } from 'src/company/agreement/entities/agreement.entity';
 import { Banner } from 'src/company/banner/entities/banner.entity';
-import { Course } from 'src/course/course/entities/course.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { CompanyStatus } from '../enum/company.enum';
 import { Teacher } from 'src/course/teacher/entities/teacher.entity';
 import { ExternalCertificate } from 'src/certificate/external-certificate/entities/external-certificate.entity';
 import { VerificationCode } from 'src/auth/entities/verification-code.entity';
 import { Student } from 'src/auth/entities/student.entity';
+import { Course } from 'src/course/course/entities';
 
 @Entity('tbl_institucion')
 export class Company {
