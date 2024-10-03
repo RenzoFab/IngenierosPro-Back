@@ -1,4 +1,4 @@
 export enum SaleDetailServiceType {
-  Course = 'Course',
+  Course = 'Curso',
   Certificate = 'Certificado',
 }

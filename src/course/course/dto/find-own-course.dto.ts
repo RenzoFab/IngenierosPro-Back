@@ -6,31 +6,18 @@ import {
   IsString,
 } from 'class-validator';
 
-import { Transform, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import {
   CourseDifficulty,
   CourseModality,
   CourseOrder,
-  CourseState,
   CourseType,
 } from '../enum/course.enum';
-import { ApiProperty } from '@nestjs/swagger';
 
-export class FindCourseDto {
-  @IsOptional()
-  @IsString()
-  company?: string;
-
+export class FindOwnCourseDto {
   @IsOptional()
   @IsString()
   category?: string;
-
-  @ApiProperty({
-    default: CourseState.Activo,
-  })
-  @IsOptional()
-  @IsEnum(CourseState)
-  state?: CourseState;
 
   @IsOptional()
   @IsEnum(CourseModality)
@@ -43,11 +30,6 @@ export class FindCourseDto {
   @IsOptional()
   @IsEnum(CourseDifficulty)
   difficulty?: CourseDifficulty;
-
-  @IsOptional()
-  @IsBoolean()
-  @Transform(({ value }) => value === 'true')
-  published?: boolean = true;
 
   @IsOptional()
   @IsString()

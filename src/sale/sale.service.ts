@@ -56,13 +56,4 @@ export class SaleService {
     if (!sale) throw new NotFoundException(`Compra con id ${id} no encontrado`);
     return sale;
   }
-
-  async findOwnCourses(studentId: number) {
-    return this.saleDetailRepository.find({
-      where: {
-        serviceType: SaleDetailServiceType.Course,
-        sale: { studentId, status: SaleStatus.Paid },
-      },
-    });
-  }
 }

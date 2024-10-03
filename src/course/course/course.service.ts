@@ -1,27 +1,29 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Course } from './entities/course.entity';
 import {
   FindOptionsOrder,
   FindOptionsWhere,
+  In,
   LessThan,
   MoreThan,
   Repository,
 } from 'typeorm';
-import { FindCourseDto, FindOneCourseDto } from './dto';
+import { FindCourseDto, FindOneCourseDto, FindOwnCourseDto } from './dto';
 import { ModuleStatus } from '../module/enum/module.enum';
 import { SessionStatus } from '../session/enum/session.enum';
 import { CourseOrder, CourseState } from './enum/course.enum';
+import { SaleDetail } from 'src/sale/entities/sale-detail.entity';
+import { SaleDetailServiceType } from 'src/sale/enum/sale-detail.enum';
+import { SaleStatus } from 'src/sale/enum/sale.enum';
+import { Course } from './entities';
 
 @Injectable()
 export class CourseService {
   constructor(
     @InjectRepository(Course) private courseRepository: Repository<Course>,
+    @InjectRepository(SaleDetail)
+    private saleDetailRepository: Repository<SaleDetail>,
   ) {}
-
-  // create(createCourseDto: CreateCourseDto) {
-  //   return 'This action adds a new course';
-  // }
 
   async findAll({
     category,
@@ -35,27 +37,7 @@ export class CourseService {
     order,
     difficulty,
   }: FindCourseDto) {
-    let orderBy: FindOptionsOrder<Course>;
-    switch (order) {
-      case CourseOrder.Newest:
-        orderBy = { publicationStartDate: 'DESC' };
-        break;
-      case CourseOrder.Oldest:
-        orderBy = { publicationStartDate: 'ASC' };
-        break;
-      case CourseOrder.Cheapest:
-        orderBy = { pricePen: 'ASC' };
-        break;
-      case CourseOrder.Expensive:
-        orderBy = { pricePen: 'DESC' };
-        break;
-      case CourseOrder.AtoZ:
-        orderBy = { name: 'ASC' };
-        break;
-      case CourseOrder.ZtoA:
-        orderBy = { name: 'DESC' };
-        break;
-    }
+    const orderBy = this.getOrder(order);
     const where: FindOptionsWhere<Course> = {
       state,
       modality,
@@ -65,7 +47,6 @@ export class CourseService {
         publicationStartDate: LessThan(new Date()),
         publicationEndDate: MoreThan(new Date()),
       }),
-
       company: {
         name: company,
       },
@@ -139,11 +120,78 @@ export class CourseService {
     }
   }
 
-  // update(id: number, updateCourseDto: UpdateCourseDto) {
-  //   return `This action updates a #${id} course`;
-  // }
+  async findOwnCourses({
+    category,
+    limit,
+    modality,
+    offset,
+    type,
+    order,
+    difficulty,
+    studentId,
+  }: FindOwnCourseDto & { studentId: number }) {
+    const orderBy = this.getOrder(order);
+    const where: FindOptionsWhere<Course> = {
+      modality,
+      difficulty,
+      type,
+      category: {
+        name: category,
+      },
+    };
+    const own = await this.saleDetailRepository.find({
+      select: {
+        serviceId: true,
+        serviceType: true,
+        accessEndDate: true,
+        accessStartDate: true,
+        status: true,
+      },
+      where: {
+        serviceType: SaleDetailServiceType.Course,
+        sale: { studentId, status: SaleStatus.Paid },
+      },
+    });
+    const [ownCourses, total] = await this.courseRepository.findAndCount({
+      where: {
+        id: In(own.map((res) => res.serviceId)),
+        ...where,
+      },
+      order: orderBy,
+      take: limit,
+      skip: offset,
+    });
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} course`;
-  // }
+    const coursesWithProgress = await Promise.all(
+      ownCourses.map(async (course) => {
+        const query = `SELECT fn_devolver_progreso_curso(${course.id}, ${studentId}) as progreso`;
+        const result = await this.courseRepository.query(query);
+        return {
+          ...course,
+          progreso: result[0].progreso,
+        };
+      }),
+    );
+
+    return { total, coursesWithProgress };
+  }
+
+  private getOrder(order: string): FindOptionsOrder<Course> {
+    switch (order) {
+      case CourseOrder.Newest:
+        return { publicationStartDate: 'DESC' };
+      case CourseOrder.Oldest:
+        return { publicationStartDate: 'ASC' };
+      case CourseOrder.Cheapest:
+        return { pricePen: 'ASC' };
+      case CourseOrder.Expensive:
+        return { pricePen: 'DESC' };
+      case CourseOrder.AtoZ:
+        return { name: 'ASC' };
+      case CourseOrder.ZtoA:
+        return { name: 'DESC' };
+      default:
+        return {};
+    }
+  }
 }

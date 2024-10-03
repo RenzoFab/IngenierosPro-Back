@@ -10,5 +10,6 @@ import { SaleDetail } from './entities/sale-detail.entity';
   controllers: [SaleController],
   providers: [SaleService],
   imports: [TypeOrmModule.forFeature([Sale, SaleDetail]), AuthModule],
+  exports: [TypeOrmModule],
 })
 export class SaleModule {}

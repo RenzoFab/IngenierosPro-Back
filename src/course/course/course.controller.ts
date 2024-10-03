@@ -1,21 +1,31 @@
-import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { CourseService } from './course.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateCourseDto, FindCourseDto, FindOneCourseDto } from './dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { FindCourseDto, FindOneCourseDto, FindOwnCourseDto } from './dto';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/decorator/get-user.decorator';
 
 @ApiTags('Course')
 @Controller('course')
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
-  // @Post()
-  // create(@Body() createCourseDto: CreateCourseDto) {
-  //   return this.courseService.create(createCourseDto);
-  // }
-
   @Get()
   findAll(@Query() findCourseDto: FindCourseDto) {
     return this.courseService.findAll(findCourseDto);
+  }
+
+  @Get('own')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard())
+  findOwnCourses(
+    @Query() findOwnCourseDto: FindOwnCourseDto,
+    @GetUser('studentId') studentId: number,
+  ) {
+    return this.courseService.findOwnCourses({
+      ...findOwnCourseDto,
+      studentId,
+    });
   }
 
   @Get(':id')
@@ -25,14 +35,4 @@ export class CourseController {
   ) {
     return this.courseService.findOne(+id, findOneCourseDto);
   }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
-  //   return this.courseService.update(+id, updateCourseDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.courseService.remove(+id);
-  // }
 }
