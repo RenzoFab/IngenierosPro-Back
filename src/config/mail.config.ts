@@ -1,4 +1,6 @@
 import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { join } from 'path';
 
 export function mailConfig() {
   return MailerModule.forRoot({
@@ -43,6 +45,11 @@ export function mailConfig() {
           pass: process.env.AGR_PASS_SMTP,
         },
       },
+    },
+    template: {
+      dir: join(__dirname, '.mail/templates'),
+      adapter: new HandlebarsAdapter(),
+      options: { strict: true },
     },
   });
 }

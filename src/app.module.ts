@@ -19,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
 import { dbConfig, mailConfig } from './config';
 import { PaymentModule } from './payment/payment.module';
 import { SaleModule } from './sale/sale.module';
+import { MailService } from './mail/mail.service';
 
 @Module({
   imports: [
@@ -45,6 +46,6 @@ import { SaleModule } from './sale/sale.module';
     SaleModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [MailService],
 })
 export class AppModule {}
