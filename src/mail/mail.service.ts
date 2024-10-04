@@ -20,12 +20,13 @@ export class MailService {
         template: 'email-code',
         transporterName: transport.name,
         from: transport.from,
-        subject: `Bienvenido a ${transport.companyName}`,
+        subject: `Código de verificación a ${transport.companyName}`,
         context: {
           code,
+          companyImage: transport.image,
         },
       });
-      console.log(`Correo enviado a ${email}`);
+      console.log(`Correo enviado a ${email} de ${transport.companyName}`);
     } catch (error) {
       console.error(`Error al enviar el correo a ${email}:`, error);
       throw new Error(`No se pudo enviar el correo: ${error.message}`);
@@ -40,24 +41,28 @@ export class MailService {
           name: 'eco',
           from: process.env.ECO_USER_SMTP,
           companyName: company.name,
+          image: company.logo,
         };
       case 'GHA':
         return {
           name: 'gha',
           from: process.env.GHA_USER_SMTP,
           companyName: company.name,
+          image: company.logo,
         };
       case 'ACM':
         return {
           name: 'acm',
           from: process.env.ACM_USER_SMTP,
           companyName: company.name,
+          image: company.logo,
         };
       case 'AGR':
         return {
           name: 'agr',
           from: process.env.AGR_USER_SMTP,
           companyName: company.name,
+          image: company.logo,
         };
     }
   }
