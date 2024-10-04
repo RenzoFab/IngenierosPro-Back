@@ -19,15 +19,13 @@ import { AuthModule } from './auth/auth.module';
 import { dbConfig, mailConfig } from './config';
 import { PaymentModule } from './payment/payment.module';
 import { SaleModule } from './sale/sale.module';
-import { MailService } from './mail/mail.service';
-
+import { MailModule } from './mail/mail.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
     dbConfig(),
-    mailConfig(),
     CompanyModule,
     BannerModule,
     AgreementModule,
@@ -44,8 +42,8 @@ import { MailService } from './mail/mail.service';
     AuthModule,
     PaymentModule,
     SaleModule,
+    MailModule,
   ],
   controllers: [],
-  providers: [MailService],
 })
 export class AppModule {}

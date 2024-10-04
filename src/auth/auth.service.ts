@@ -1,3 +1,4 @@
+import { MailService } from './../mail/mail.service';
 import {
   BadRequestException,
   Injectable,
@@ -21,6 +22,7 @@ export class AuthService {
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
     private jwtService: JwtService,
+    private mailService: MailService,
   ) {}
 
   async login({ companyId, email, password }: LoginDto) {
@@ -58,7 +60,10 @@ export class AuthService {
           throw new BadRequestException('El correo ya se encuentra registrado');
         }
         verificationCode.code = code;
-        return await this.verificationCodeRepository.save(verificationCode);
+        const response =
+          await this.verificationCodeRepository.save(verificationCode);
+        await this.mailService.sendEmailCode(email);
+        return { email, message: `Código enviado a ${email}` };
       }
       const newVerificationCode = this.verificationCodeRepository.create({
         code,
@@ -67,7 +72,8 @@ export class AuthService {
       });
       const response =
         await this.verificationCodeRepository.save(newVerificationCode);
-      return { code: response.code, email: response.email };
+      await this.mailService.sendEmailCode(email);
+      return { email: `Correo enviado a ${email}` };
     } catch (error) {
       if (error?.errno === 1452) {
         throw new BadRequestException(
