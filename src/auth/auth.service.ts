@@ -62,8 +62,15 @@ export class AuthService {
         verificationCode.code = code;
         const response =
           await this.verificationCodeRepository.save(verificationCode);
-        await this.mailService.sendEmailCode(email);
-        return { email, message: `Código enviado a ${email}` };
+        await this.mailService.sendEmailCode(
+          companyId,
+          response.email,
+          response.code,
+        );
+        return {
+          email: response.email,
+          message: `Código enviado a ${response.email}`,
+        };
       }
       const newVerificationCode = this.verificationCodeRepository.create({
         code,
@@ -72,8 +79,15 @@ export class AuthService {
       });
       const response =
         await this.verificationCodeRepository.save(newVerificationCode);
-      await this.mailService.sendEmailCode(email);
-      return { email: `Correo enviado a ${email}` };
+      await this.mailService.sendEmailCode(
+        companyId,
+        response.email,
+        response.code,
+      );
+      return {
+        email: response.email,
+        message: `Correo enviado a ${response.email}`,
+      };
     } catch (error) {
       if (error?.errno === 1452) {
         throw new BadRequestException(
