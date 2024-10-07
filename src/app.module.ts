@@ -13,9 +13,9 @@ import { ExternalCertificateModule } from './certificate/external-certificate/ex
 import { OwnCertificateModule } from './certificate/own-certificate/own-certificate.module';
 import { AuthModule } from './auth/auth.module';
 import { dbConfig, mailConfig } from './config';
-import { PaymentModule } from './payment/payment.module';
-import { SaleModule } from './sale/sale.module';
 import { MailModule } from './mail/mail.module';
+import { PaymentModule } from './sale/payment/payment.module';
+import { SaleModule } from './sale/sale/sale.module';
 @Module({
   imports: [
     ConfigModule.forRoot({

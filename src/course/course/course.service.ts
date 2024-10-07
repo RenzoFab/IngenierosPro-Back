@@ -12,10 +12,10 @@ import { FindCourseDto, FindOneCourseDto, FindOwnCourseDto } from './dto';
 import { ModuleStatus } from './enum/module.enum';
 import { SessionStatus } from './enum/session.enum';
 import { CourseOrder, CourseState } from './enum/course.enum';
-import { SaleDetail } from 'src/sale/entities/sale-detail.entity';
-import { SaleDetailServiceType } from 'src/sale/enum/sale-detail.enum';
-import { SaleStatus } from 'src/sale/enum/sale.enum';
 import { Course } from './entities';
+import { SaleDetail } from 'src/sale/sale/entities/sale-detail.entity';
+import { SaleDetailServiceType } from 'src/sale/sale/enum/sale-detail.enum';
+import { SaleStatus } from 'src/sale/sale/enum/sale.enum';
 
 @Injectable()
 export class CourseService {

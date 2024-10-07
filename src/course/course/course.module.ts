@@ -4,9 +4,9 @@ import { CourseController } from './course.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Course } from './entities/course.entity';
 import { Category } from './entities/category.entity';
-import { SaleModule } from 'src/sale/sale.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { Material, Module as module, Session, Task } from './entities';
+import { SaleModule } from 'src/sale/sale/sale.module';
 
 @Module({
   controllers: [CourseController],

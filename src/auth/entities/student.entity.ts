@@ -10,7 +10,7 @@ import {
 import { User } from './user.entity';
 import { Company } from 'src/company/company/entities/company.entity';
 import { OwnCertificate } from 'src/certificate/own-certificate/entities/own-certificate.entity';
-import { Sale } from 'src/sale/entities/sale.entity';
+import { Sale } from 'src/sale/sale/entities/sale.entity';
 
 @Entity('tbl_estudiante')
 export class Student {
@@ -62,6 +62,6 @@ export class Student {
   @OneToMany(() => OwnCertificate, (ownCertificate) => ownCertificate.student)
   ownCertificates: OwnCertificate[];
 
-  @OneToMany(()=>Sale, sale=>sale.student)
+  @OneToMany(() => Sale, (sale) => sale.student)
   sales: Sale[];
 }
