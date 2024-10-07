@@ -36,7 +36,7 @@ export class Sale {
     name: 'compra_precio_total',
     type: 'decimal',
   })
-  priceTotal: number;
+  priceBase: number;
 
   @Column({
     name: 'compra_precio_final_soles',

@@ -14,14 +14,15 @@ import { OwnCertificateModule } from './certificate/own-certificate/own-certific
 import { AuthModule } from './auth/auth.module';
 import { dbConfig, mailConfig } from './config';
 import { MailModule } from './mail/mail.module';
-import { PaymentModule } from './sale/payment/payment.module';
 import { SaleModule } from './sale/sale/sale.module';
+import { CulqiModule } from './sale/culqi/culqi.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
     dbConfig(),
+    MailModule,
     CompanyModule,
     BannerModule,
     AgreementModule,
@@ -32,9 +33,8 @@ import { SaleModule } from './sale/sale/sale.module';
     ExternalCertificateModule,
     OwnCertificateModule,
     AuthModule,
-    PaymentModule,
     SaleModule,
-    MailModule,
+    CulqiModule,
   ],
   controllers: [],
 })

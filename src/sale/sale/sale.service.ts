@@ -2,10 +2,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindSaleDto } from './dto/find-sale.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Sale } from './entities/sale.entity';
-import { Repository } from 'typeorm';
-import { SaleDetailServiceType } from './enum/sale-detail.enum';
+import { DeepPartial, Repository } from 'typeorm';
 import { SaleDetail } from './entities/sale-detail.entity';
-import { SaleStatus } from './enum/sale.enum';
+import { CreateSaleDto } from './dto';
 
 @Injectable()
 export class SaleService {
@@ -25,7 +24,7 @@ export class SaleService {
         currency: true,
         date: true,
         paymentDate: true,
-        priceTotal: true,
+        priceBase: true,
         pricePEN: true,
         priceUSD: true,
         status: true,
@@ -42,7 +41,7 @@ export class SaleService {
         currency: true,
         date: true,
         paymentDate: true,
-        priceTotal: true,
+        priceBase: true,
         pricePEN: true,
         priceUSD: true,
         status: true,
@@ -55,5 +54,22 @@ export class SaleService {
     });
     if (!sale) throw new NotFoundException(`Compra con id ${id} no encontrado`);
     return sale;
+  }
+
+  async create(createSaleDto: CreateSaleDto, studentId: number) {
+    const date = new Date();
+    const newSale = this.saleRepository.create({
+      ...createSaleDto,
+      date,
+      paymentDate: date,
+      products: '',
+      transactionNumber: createSaleDto.tokenPayment,
+    });
+    const sale = await this.saleRepository.save(newSale);
+    return sale;
+  }
+
+  async createSaleDetail(){
+    
   }
 }
