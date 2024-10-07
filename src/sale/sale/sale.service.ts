@@ -1,3 +1,4 @@
+import { CreateSaleDetailDto } from './dto/create-sale-detail.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindSaleDto } from './dto/find-sale.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
@@ -69,7 +70,15 @@ export class SaleService {
     return sale;
   }
 
-  async createSaleDetail(){
-    
+  async createSaleDetail(createSaleDetailDto: CreateSaleDetailDto) {
+    const newSaleDetail = this.saleDetailRepository.create({
+      ...createSaleDetailDto,
+      accessEndDate: '',
+      accessStartDate: '',
+      userCountry: '',
+      couponPercentage: 0,
+    });
+    const saleDetail = await this.saleDetailRepository.save(newSaleDetail);
+    return saleDetail;
   }
 }

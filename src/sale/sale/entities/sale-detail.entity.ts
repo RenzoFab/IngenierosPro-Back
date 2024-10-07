@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Sale } from './sale.entity';
 import { SaleDetailServiceType } from '../enum/sale-detail.enum';
 
@@ -52,18 +58,6 @@ export class SaleDetail {
   })
   couponDiscountUSD?: number;
 
-  // @ManyToOne(() => Coupon, (coupon) => coupon.saleDetails, { nullable: true })
-  // coupon?: Coupon;
-
-  @ManyToOne(() => Sale, (sale) => sale.saleDetails)
-  @JoinColumn({ name: 'compra_id' })
-  sale: Sale;
-
-  // @ManyToOne(() => AccessPlan, (accessPlan) => accessPlan.saleDetails, {
-  //   nullable: true,
-  // })
-  // accessPlan?: AccessPlan;
-
   @Column({
     name: 'detalleventa_fecha_inicio_acceso',
     type: 'datetime',
@@ -81,4 +75,16 @@ export class SaleDetail {
 
   @Column({ type: 'tinyint', default: 1, name: 'detalleventa_estado' })
   status: number;
+
+  @ManyToOne(() => Sale, (sale) => sale.saleDetails)
+  @JoinColumn({ name: 'compra_id' })
+  sale: Sale;
+
+  // @ManyToOne(() => Coupon, (coupon) => coupon.saleDetails, { nullable: true })
+  // coupon?: Coupon;
+
+  // @ManyToOne(() => AccessPlan, (accessPlan) => accessPlan.saleDetails, {
+  //   nullable: true,
+  // })
+  // accessPlan?: AccessPlan;
 }
