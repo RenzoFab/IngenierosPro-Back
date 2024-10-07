@@ -1,4 +1,3 @@
-import { Module } from 'src/course/module/entities/module.entity';
 import {
   Column,
   Entity,
@@ -6,6 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Module } from './module.entity';
 
 @Entity('tbl_sesion')
 export class Session {

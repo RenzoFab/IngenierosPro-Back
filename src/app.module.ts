@@ -7,10 +7,6 @@ import { BannerModule } from './company/banner/banner.module';
 import { CompanyModule } from './company/company/company.module';
 import { CourseModule } from './course/course/course.module';
 import { EvaluationModule } from './course/evaluation/evaluation.module';
-import { MaterialModule } from './course/material/material.module';
-import { ModuleModule } from './course/module/module.module';
-import { SessionModule } from './course/session/session.module';
-import { TaskModule } from './course/task/task.module';
 import { TeacherModule } from './course/teacher/teacher.module';
 import { CertificateModule } from './certificate/certificate/certificate.module';
 import { ExternalCertificateModule } from './certificate/external-certificate/external-certificate.module';
@@ -30,11 +26,7 @@ import { MailModule } from './mail/mail.module';
     BannerModule,
     AgreementModule,
     CourseModule,
-    ModuleModule,
-    SessionModule,
     EvaluationModule,
-    MaterialModule,
-    TaskModule,
     TeacherModule,
     CertificateModule,
     ExternalCertificateModule,

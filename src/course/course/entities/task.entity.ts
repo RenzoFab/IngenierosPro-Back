@@ -1,4 +1,3 @@
-import { Module } from 'src/course/module/entities/module.entity';
 import {
   Entity,
   Column,
@@ -6,6 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+import { Module } from './module.entity';
 
 @Entity('tbl_entregables')
 export class Task {

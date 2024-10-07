@@ -8,10 +8,10 @@ import {
   OneToMany,
 } from 'typeorm';
 import { ModuleStatus } from '../enum/module.enum';
-import { Session } from 'src/course/session/entities/session.entity';
 import { Evaluation } from 'src/course/evaluation/entities/evaluation.entity';
-import { Material } from 'src/course/material/entities/material.entity';
-import { Task } from 'src/course/task/entities/task.entity';
+import { Session } from './session.entity';
+import { Material } from './material.entity';
+import { Task } from './task.entity';
 
 @Entity('tbl_modulo')
 export class Module {

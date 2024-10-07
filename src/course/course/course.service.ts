@@ -9,8 +9,8 @@ import {
   Repository,
 } from 'typeorm';
 import { FindCourseDto, FindOneCourseDto, FindOwnCourseDto } from './dto';
-import { ModuleStatus } from '../module/enum/module.enum';
-import { SessionStatus } from '../session/enum/session.enum';
+import { ModuleStatus } from './enum/module.enum';
+import { SessionStatus } from './enum/session.enum';
 import { CourseOrder, CourseState } from './enum/course.enum';
 import { SaleDetail } from 'src/sale/entities/sale-detail.entity';
 import { SaleDetailServiceType } from 'src/sale/enum/sale-detail.enum';
@@ -164,8 +164,9 @@ export class CourseService {
 
     const coursesWithProgress = await Promise.all(
       ownCourses.map(async (course) => {
-        const query = `SELECT fn_devolver_progreso_curso(${course.id}, ${studentId}) as progreso`;
+        let query = `SELECT fn_devolver_progreso_curso(${course.id}, ${studentId}) as progreso`;
         const [result] = await this.courseRepository.query(query);
+        // query = `SELECT fn_verificar_acceso_curso_gratuito(${studentId}, ${course.id}, m.matricula_id) as acces`
         return {
           ...course,
           progreso: result.progreso,

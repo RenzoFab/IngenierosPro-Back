@@ -1,4 +1,4 @@
-import { Module } from 'src/course/module/entities/module.entity';
+import { Module } from 'src/course/course/entities';
 import {
   Entity,
   PrimaryGeneratedColumn,
