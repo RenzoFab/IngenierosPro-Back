@@ -16,6 +16,7 @@ import { dbConfig, mailConfig } from './config';
 import { MailModule } from './mail/mail.module';
 import { SaleModule } from './sale/sale/sale.module';
 import { CulqiModule } from './sale/culqi/culqi.module';
+import { CouponModule } from './sale/coupon/coupon.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,6 +36,7 @@ import { CulqiModule } from './sale/culqi/culqi.module';
     AuthModule,
     SaleModule,
     CulqiModule,
+    CouponModule,
   ],
   controllers: [],
 })
