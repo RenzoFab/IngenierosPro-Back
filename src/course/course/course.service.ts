@@ -165,10 +165,10 @@ export class CourseService {
     const coursesWithProgress = await Promise.all(
       ownCourses.map(async (course) => {
         const query = `SELECT fn_devolver_progreso_curso(${course.id}, ${studentId}) as progreso`;
-        const result = await this.courseRepository.query(query);
+        const [result] = await this.courseRepository.query(query);
         return {
           ...course,
-          progreso: result[0].progreso,
+          progreso: result.progreso,
         };
       }),
     );
