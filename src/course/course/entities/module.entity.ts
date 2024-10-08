@@ -52,5 +52,5 @@ export class Module {
   materials: Material[];
 
   @OneToMany(() => Task, (task) => task.module)
-  task: Task[];
+  tasks: Task[];
 }

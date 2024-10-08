@@ -49,12 +49,12 @@ export class Task {
     width: 1,
     nullable: false,
   })
-  status: number;
+  state: number;
 
   @Column({ name: 'modulo_id' })
   moduleId: number;
 
-  @ManyToOne(() => Module, (module) => module.task)
+  @ManyToOne(() => Module, (module) => module.tasks)
   @JoinColumn({ name: 'modulo_id' })
   module: Module;
 }

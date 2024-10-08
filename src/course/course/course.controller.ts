@@ -35,4 +35,14 @@ export class CourseController {
   ) {
     return this.courseService.findOne(+id, findOneCourseDto);
   }
+
+  @Get(':id/classroom')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard())
+  findOneclassroom(
+    @Param('id') id: number,
+    @GetUser('studentId') studentId: number,
+  ) {
+    return this.courseService.findOneClassroom(+id, studentId);
+  }
 }

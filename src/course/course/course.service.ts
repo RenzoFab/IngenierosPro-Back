@@ -63,6 +63,62 @@ export class CourseService {
     return { total, courses };
   }
 
+  async findOwnCourses({
+    category,
+    limit,
+    modality,
+    offset,
+    type,
+    order,
+    difficulty,
+    studentId,
+  }: FindOwnCourseDto & { studentId: number }) {
+    const orderBy = this.getOrder(order);
+    const where: FindOptionsWhere<Course> = {
+      modality,
+      difficulty,
+      type,
+      category: {
+        name: category,
+      },
+    };
+    const own = await this.saleDetailRepository.find({
+      select: {
+        serviceId: true,
+        serviceType: true,
+        accessEndDate: true,
+        accessStartDate: true,
+        status: true,
+      },
+      where: {
+        serviceType: SaleDetailServiceType.Course,
+        sale: { studentId, status: SaleStatus.Paid },
+      },
+    });
+    const [ownCourses, total] = await this.courseRepository.findAndCount({
+      where: {
+        id: In(own.map((res) => res.serviceId)),
+        ...where,
+      },
+      order: orderBy,
+      take: limit,
+      skip: offset,
+    });
+
+    const coursesWithProgress = await Promise.all(
+      ownCourses.map(async (course) => {
+        const query = `SELECT fn_devolver_progreso_curso(${course.id}, ${studentId}) as progreso`;
+        const result = await this.courseRepository.query(query);
+        return {
+          ...course,
+          progreso: result[0].progreso,
+        };
+      }),
+    );
+
+    return { total, coursesWithProgress };
+  }
+
   async findOne(id: number, { company, published, state }: FindOneCourseDto) {
     try {
       const currentDate = new Date();
@@ -120,26 +176,8 @@ export class CourseService {
     }
   }
 
-  async findOwnCourses({
-    category,
-    limit,
-    modality,
-    offset,
-    type,
-    order,
-    difficulty,
-    studentId,
-  }: FindOwnCourseDto & { studentId: number }) {
-    const orderBy = this.getOrder(order);
-    const where: FindOptionsWhere<Course> = {
-      modality,
-      difficulty,
-      type,
-      category: {
-        name: category,
-      },
-    };
-    const own = await this.saleDetailRepository.find({
+  async findOneClassroom(id: number, studentId: number) {
+    const [own] = await this.saleDetailRepository.find({
       select: {
         serviceId: true,
         serviceType: true,
@@ -149,32 +187,47 @@ export class CourseService {
       },
       where: {
         serviceType: SaleDetailServiceType.Course,
+        serviceId: id,
         sale: { studentId, status: SaleStatus.Paid },
       },
     });
-    const [ownCourses, total] = await this.courseRepository.findAndCount({
-      where: {
-        id: In(own.map((res) => res.serviceId)),
-        ...where,
-      },
-      order: orderBy,
-      take: limit,
-      skip: offset,
-    });
+    if (!own)
+      throw new NotFoundException(
+        `El curso no existe o no se encuentra matriculado`,
+      );
 
-    const coursesWithProgress = await Promise.all(
-      ownCourses.map(async (course) => {
-        let query = `SELECT fn_devolver_progreso_curso(${course.id}, ${studentId}) as progreso`;
-        const [result] = await this.courseRepository.query(query);
-        // query = `SELECT fn_verificar_acceso_curso_gratuito(${studentId}, ${course.id}, m.matricula_id) as acces`
-        return {
-          ...course,
-          progreso: result.progreso,
-        };
-      }),
-    );
-
-    return { total, coursesWithProgress };
+    const currentDate = new Date();
+    const course = await this.courseRepository
+      .createQueryBuilder('course')
+      .leftJoinAndSelect('course.modules', 'module')
+      .leftJoinAndSelect(
+        'module.sessions',
+        'sessions',
+        'module.startDate <= :currentDate AND sessions.state = :state',
+        { currentDate, state: 1 },
+      )
+      .leftJoinAndSelect(
+        'module.materials',
+        'materials',
+        'module.startDate <= :currentDate AND materials.state = :state',
+        { currentDate, state: 1 },
+      )
+      .leftJoinAndSelect(
+        'module.evaluations',
+        'evaluations',
+        'module.startDate <= :currentDate AND evaluations.state = :state',
+        { currentDate, state: 1 },
+      )
+      .leftJoinAndSelect(
+        'module.tasks',
+        'tasks',
+        'module.startDate <= :currentDate AND tasks.state = :state',
+        { currentDate, state: 1 },
+      )
+      .where('course.id = :id', { id })
+      .andWhere('module.state = :state', { state: 1 })
+      .getOne();
+    return course;
   }
 
   private getOrder(order: string): FindOptionsOrder<Course> {
