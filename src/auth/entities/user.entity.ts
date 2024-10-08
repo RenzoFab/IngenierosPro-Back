@@ -139,7 +139,7 @@ export class User {
   idRol: number;
 
   @OneToOne(() => Teacher, (teacher) => teacher.user)
-  teachers: Teacher[];
+  teacher: Teacher;
 
   @OneToOne(() => Student, (student) => student.user)
   student: Student;

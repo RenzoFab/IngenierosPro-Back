@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from '../../../auth/entities/user.entity';
 import { Course } from 'src/course/course/entities/course.entity';
+import { Enrollment } from 'src/course/course/entities/enrollment.entity';
 
 @Entity('tbl_docente')
 export class Teacher {
@@ -50,14 +51,17 @@ export class Teacher {
   //   })
   //   canCreateCoupon: boolean;
 
+  @OneToOne(() => User, (user) => user.teacher)
+  @JoinColumn({ name: 'usuario_id' })
+  user: User;
+
+  @OneToMany(() => Enrollment, (Enrollment) => Enrollment.teacher)
+  enrollments: Enrollment[];
+
   @OneToMany(() => Course, (course) => course.teacher)
   courses: Course[];
 
   @ManyToOne(() => Company, (company) => company.teachers)
   @JoinColumn({ name: 'institucion_id' })
   company: Company;
-
-  @OneToOne(() => User, (user) => user.teachers)
-  @JoinColumn({ name: 'usuario_id' })
-  user: User;
 }

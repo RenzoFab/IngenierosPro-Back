@@ -4,9 +4,11 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { Sale } from './sale.entity';
 import { SaleDetailServiceType } from '../enum/sale-detail.enum';
+import { Enrollment } from 'src/course/course/entities/enrollment.entity';
 
 @Entity('tbl_detalleventa')
 export class SaleDetail {
@@ -75,6 +77,9 @@ export class SaleDetail {
 
   @Column({ type: 'tinyint', default: 1, name: 'detalleventa_estado' })
   status: number;
+
+  @OneToOne(() => Enrollment, (enrollment) => enrollment.saleDetail)
+  enrollment: Enrollment;
 
   @ManyToOne(() => Sale, (sale) => sale.saleDetails)
   @JoinColumn({ name: 'compra_id' })

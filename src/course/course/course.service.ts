@@ -230,6 +230,8 @@ export class CourseService {
     return course;
   }
 
+  asyncEnrollCourse() {}
+
   private getOrder(order: string): FindOptionsOrder<Course> {
     switch (order) {
       case CourseOrder.Newest:

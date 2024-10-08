@@ -12,6 +12,7 @@ import { Company } from 'src/company/company/entities/company.entity';
 import { OwnCertificate } from 'src/certificate/own-certificate/entities/own-certificate.entity';
 import { Sale } from 'src/sale/sale/entities/sale.entity';
 import { StudentCoupon } from 'src/sale/coupon/entities/student-coupon.entity';
+import { Enrollment } from 'src/course/course/entities/enrollment.entity';
 
 @Entity('tbl_estudiante')
 export class Student {
@@ -62,8 +63,11 @@ export class Student {
   @OneToMany(() => Sale, (sale) => sale.student)
   sales: Sale[];
 
-  @OneToMany(() => StudentCoupon, (coupon) => coupon.student)
+  @OneToMany(() => StudentCoupon, (studentCoupons) => studentCoupons.student)
   studentCoupons: StudentCoupon[];
+
+  @OneToMany(() => Enrollment, (Enrollment) => Enrollment.student)
+  enrollments: Enrollment[];
 
   @ManyToOne(() => Company, (company) => company.students)
   @JoinColumn({ name: 'institucion_id' })
