@@ -29,7 +29,7 @@ export class Material {
   url: string;
 
   @Column({ name: 'material_estado', type: 'tinyint', default: 1 })
-  status: number;
+  state: number;
 
   @Column({ name: 'modulo_id' })
   moduleId: number;
