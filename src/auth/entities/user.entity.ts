@@ -10,6 +10,7 @@ import {
 import { Teacher } from '../../course/teacher/entities/teacher.entity';
 import { Student } from './student.entity';
 import { Role } from './role.entity';
+import { Coupon } from 'src/sale/coupon/entities/coupon.entity';
 
 @Entity('tbl_usuario')
 export class User {
@@ -146,4 +147,7 @@ export class User {
   @ManyToOne(() => Role, (role) => role.users)
   @JoinColumn({ name: 'rol_id' })
   role: Role;
+
+  @OneToMany(() => Coupon, (coupon) => coupon.user)
+  coupons: Coupon[];
 }

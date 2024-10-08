@@ -11,6 +11,7 @@ import { User } from './user.entity';
 import { Company } from 'src/company/company/entities/company.entity';
 import { OwnCertificate } from 'src/certificate/own-certificate/entities/own-certificate.entity';
 import { Sale } from 'src/sale/sale/entities/sale.entity';
+import { StudentCoupon } from 'src/sale/coupon/entities/student-coupon.entity';
 
 @Entity('tbl_estudiante')
 export class Student {
@@ -51,10 +52,6 @@ export class Student {
   })
   userId: number;
 
-  @ManyToOne(() => Company, (company) => company.students)
-  @JoinColumn({ name: 'institucion_id' })
-  company: Company;
-
   @OneToOne(() => User, (user) => user.student)
   @JoinColumn({ name: 'usuario_id' })
   user: User;
@@ -64,4 +61,11 @@ export class Student {
 
   @OneToMany(() => Sale, (sale) => sale.student)
   sales: Sale[];
+
+  @OneToMany(() => StudentCoupon, (coupon) => coupon.student)
+  studentCoupons: StudentCoupon[];
+
+  @ManyToOne(() => Company, (company) => company.students)
+  @JoinColumn({ name: 'institucion_id' })
+  company: Company;
 }

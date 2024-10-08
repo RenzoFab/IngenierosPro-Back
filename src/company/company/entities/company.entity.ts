@@ -7,6 +7,7 @@ import { ExternalCertificate } from 'src/certificate/external-certificate/entiti
 import { VerificationCode } from 'src/auth/entities/verification-code.entity';
 import { Student } from 'src/auth/entities/student.entity';
 import { Course } from 'src/course/course/entities';
+import { Coupon } from 'src/sale/coupon/entities/coupon.entity';
 
 @Entity('tbl_institucion')
 export class Company {
@@ -228,4 +229,7 @@ export class Company {
     (verificationCode) => verificationCode.company,
   )
   verificationCode: VerificationCode[];
+
+  @OneToMany(() => Coupon, (coupon) => coupon.company)
+  coupons: Coupon[];
 }
