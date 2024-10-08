@@ -3,15 +3,23 @@ import { CourseService } from './course.service';
 import { CourseController } from './course.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
-import { SaleModule } from 'src/sale/sale.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { Course } from './entities';
+import { Material, Module as module, Session, Task } from './entities';
+import { SaleModule } from 'src/sale/sale/sale.module';
 
 @Module({
   controllers: [CourseController],
   providers: [CourseService],
   imports: [
-    TypeOrmModule.forFeature([Course, Category]),
+    TypeOrmModule.forFeature([
+      Course,
+      Category,
+      Material,
+      module,
+      Session,
+      Task,
+    ]),
     SaleModule,
     AuthModule,
   ],

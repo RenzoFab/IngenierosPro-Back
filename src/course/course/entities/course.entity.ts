@@ -12,10 +12,10 @@ import {
   CourseType,
   CourseModality,
 } from '../enum/course.enum';
-import { Module } from 'src/course/module/entities/module.entity';
 import { Company } from 'src/company/company/entities/company.entity';
 import { Teacher } from 'src/course/teacher/entities/teacher.entity';
 import { Category } from './category.entity';
+import { Module } from './module.entity';
 
 @Entity('tbl_curso')
 export class Course {

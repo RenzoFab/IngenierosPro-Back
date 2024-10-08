@@ -23,9 +23,19 @@ export class CompanyService {
     return companies;
   }
 
-  async findOne(name: string) {
+  async findOne(term: string | number) {
     try {
-      const [company] = await this.companyRepository.findBy({ name });
+      let company: Company;
+      if (typeof term === 'number' || !isNaN(+term)) {
+        company = await this.companyRepository.findOne({
+          where: { id: +term },
+        });
+      } else {
+        company = await this.companyRepository.findOne({
+          where: { name: term },
+        });
+      }
+
       if (!company)
         throw new NotFoundException(`La empresa "${name}" no existe`);
       return company;
