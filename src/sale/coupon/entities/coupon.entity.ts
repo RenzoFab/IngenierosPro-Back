@@ -52,14 +52,14 @@ export class Coupon {
     name: 'cupon_estudiante_maxima',
     type: 'int',
   })
-  studentMax: number;
+  totalCoupons: number;
 
   @Column({
     name: 'cupon_capacidad_estudiantes',
     type: 'int',
     default: 0,
   })
-  studentCapacity: number;
+  availableCoupons: number;
 
   @Column({
     name: 'cupon_monto_porcentaje',

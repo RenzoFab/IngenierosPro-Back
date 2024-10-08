@@ -7,6 +7,8 @@ import {
 } from 'typeorm';
 import { Coupon } from './coupon.entity';
 import { Student } from 'src/auth/entities';
+import { CouponType } from '../enum/coupon.enum';
+import { StudentCouponState } from '../enum/student-coupon.enum';
 
 @Entity('tbl_miscupones')
 export class StudentCoupon {
@@ -17,10 +19,10 @@ export class StudentCoupon {
   expirationDate: Date;
 
   @Column({ name: 'cupon_estado', type: 'varchar', length: 50 })
-  couponStatus: string;
+  state: StudentCouponState;
 
   @Column({ name: 'cupon_tipo', type: 'varchar', length: 100, nullable: true })
-  couponType: string;
+  type: CouponType;
 
   @Column({ name: 'servicio_id', type: 'int', nullable: true })
   serviceId: number;
@@ -33,7 +35,7 @@ export class StudentCoupon {
     type: 'datetime',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  acquisitionDate: Date;
+  purchaseDate: Date;
 
   @Column({ name: 'cupon_id', type: 'int' })
   couponId: number;
