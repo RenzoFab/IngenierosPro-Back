@@ -17,6 +17,7 @@ import { MailModule } from './mail/mail.module';
 import { SaleModule } from './sale/sale/sale.module';
 import { CulqiModule } from './sale/culqi/culqi.module';
 import { CouponModule } from './sale/coupon/coupon.module';
+import { CommonModule } from './common/common.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -37,6 +38,7 @@ import { CouponModule } from './sale/coupon/coupon.module';
     SaleModule,
     CulqiModule,
     CouponModule,
+    CommonModule,
   ],
   controllers: [],
 })

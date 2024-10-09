@@ -5,5 +5,6 @@ import { CulqiController } from './culqi.controller';
 @Module({
   controllers: [CulqiController],
   providers: [CulqiService],
+  imports: [CulqiModule],
 })
 export class CulqiModule {}

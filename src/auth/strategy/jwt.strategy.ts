@@ -19,8 +19,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate({ studentId, userId }: JwtPayload) {
     const user = await this.userRepository.findOne({
-      relations: ['student'],
-      select: { student: { companyId: true } },
+      relations: ['student', 'student.company'],
+      select: { student: { companyId: true, company: { name: true } } },
       where: {
         id: userId,
         student: { id: studentId },
@@ -28,8 +28,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
     if (!user) throw new UnauthorizedException('Token invalido');
     const companyId = user.student.companyId;
+    const companyName = user.student.company.name;
     delete user.id;
     delete user.student;
-    return { ...user, studentId, userId, companyId };
+    return { ...user, studentId, userId, companyId, companyName };
   }
 }
