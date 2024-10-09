@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  DeepPartial,
   FindOptionsOrder,
   FindOptionsWhere,
   In,
@@ -16,6 +17,8 @@ import { Course } from './entities';
 import { SaleDetail } from 'src/sale/sale/entities/sale-detail.entity';
 import { SaleDetailServiceType } from 'src/sale/sale/enum/sale-detail.enum';
 import { SaleStatus } from 'src/sale/sale/enum/sale.enum';
+import { Enrollment } from './entities/enrollment.entity';
+import { EnrollmentPackageType, EnrollmentState } from './enum/enrollment.enum';
 
 @Injectable()
 export class CourseService {
@@ -23,6 +26,8 @@ export class CourseService {
     @InjectRepository(Course) private courseRepository: Repository<Course>,
     @InjectRepository(SaleDetail)
     private saleDetailRepository: Repository<SaleDetail>,
+    @InjectRepository(Enrollment)
+    private enrollmentRepository: Repository<Enrollment>,
   ) {}
 
   async findAll({
@@ -230,8 +235,6 @@ export class CourseService {
     return course;
   }
 
-  asyncEnrollCourse() {}
-
   private getOrder(order: string): FindOptionsOrder<Course> {
     switch (order) {
       case CourseOrder.Newest:
@@ -249,5 +252,11 @@ export class CourseService {
       default:
         return {};
     }
+  }
+
+  private addDaysToDate(days: number): Date {
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    return date;
   }
 }

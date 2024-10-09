@@ -178,6 +178,9 @@ export class Course {
   @Column({ name: 'categoria_curso_id' })
   categoryId: number;
 
+  @Column({ name: 'docente_id' })
+  teacherId: number;
+
   @ManyToOne(() => Company, (company) => company.cursos)
   @JoinColumn({ name: 'institucion_id' })
   company: Company;

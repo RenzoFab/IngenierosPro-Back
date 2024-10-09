@@ -18,7 +18,7 @@ import { SaleDetail } from 'src/sale/sale/entities/sale-detail.entity';
 
 @Entity('tbl_matricula')
 export class Enrollment {
-  @PrimaryGeneratedColumn({ name: 'matricula_id' }) // Nombre de la columna en la BD
+  @PrimaryGeneratedColumn({ name: 'matricula_id' })
   id: number;
 
   @Column({
@@ -33,6 +33,14 @@ export class Enrollment {
 
   @Column({ type: 'datetime', name: 'matricula_fecha_fin_acceso' })
   accessEndDate: Date;
+
+  // TODO: cambiar nombre
+  @Column({
+    type: 'datetime',
+    name: 'matricula_fecha_finalizacion',
+    nullable: true,
+  })
+  completionDate: Date;
 
   @Column({ type: 'tinyint', name: 'matricula_estado' })
   status: EnrollmentState;
@@ -49,10 +57,6 @@ export class Enrollment {
 
   @Column({ type: 'int', name: 'matricula_valoracion_tutor', nullable: true })
   tutorRating: number;
-
-  @ManyToOne(() => Course)
-  @JoinColumn({ name: 'curso_id' }) // Referencia a la columna curso_id
-  course: Course;
 
   @Column({
     type: 'varchar',
@@ -104,12 +108,21 @@ export class Enrollment {
   })
   updaterAccess: number;
 
-  @Column({
-    type: 'datetime',
-    name: 'matricula_fecha_finalizacion',
-    nullable: true,
-  })
-  completionDate: Date;
+  @Column({ name: 'detalleventa_id' })
+  saleDetailId: number;
+
+  @Column({ name: 'estudiante_id' })
+  studentId: number;
+
+  @Column({ name: 'docente_id' })
+  teacherId: number;
+
+  @Column({ name: 'curso_id' })
+  courseId: number;
+
+  @ManyToOne(() => Course)
+  @JoinColumn({ name: 'curso_id' })
+  course: Course;
 
   @OneToOne(() => SaleDetail, (saleDetail) => saleDetail)
   @JoinColumn({ name: 'detalleventa_id' })
