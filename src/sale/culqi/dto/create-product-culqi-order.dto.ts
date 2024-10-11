@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { CreateCulqiOrderDto } from './create-culqi-order.dto';
 import { Type } from 'class-transformer';
-import { ProductCartDto } from 'src/compra/dto/productos-cart.dto';
+import { ProductCartDto } from './productos-cart.dto';
 
 export class CreateProductCulqiOrderDto extends CreateCulqiOrderDto {
   @IsOptional()
@@ -20,5 +20,5 @@ export class CreateProductCulqiOrderDto extends CreateCulqiOrderDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ProductCartDto)
-  productos: ProductCartDto[];
+  products: ProductCartDto[];
 }

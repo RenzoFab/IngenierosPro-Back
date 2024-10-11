@@ -9,5 +9,6 @@ import { AuthModule } from 'src/auth/auth.module';
   controllers: [CouponController],
   providers: [CouponService],
   imports: [TypeOrmModule.forFeature([Coupon, StudentCoupon]), AuthModule],
+  exports: [CouponService, TypeOrmModule],
 })
 export class CouponModule {}

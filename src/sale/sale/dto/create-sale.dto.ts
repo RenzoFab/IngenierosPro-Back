@@ -1,5 +1,11 @@
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { SaleCurrency } from '../enum/sale.enum';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateIf,
+} from 'class-validator';
+import { SaleCurrency, SaleResponsible, SaleType } from '../enum/sale.enum';
 
 export class CreateSaleDto {
   @IsEnum(SaleCurrency)
@@ -8,16 +14,20 @@ export class CreateSaleDto {
   @IsNumber()
   priceBase: number;
 
+  @ValidateIf((o) => o.currency === SaleCurrency.PEN)
   @IsNumber()
   pricePEN: number;
 
+  @ValidateIf((o) => o.currency === SaleCurrency.USD)
   @IsNumber()
   priceUSD: number;
 
+  @ValidateIf((o) => o.currency === SaleCurrency.PEN)
   @IsOptional()
   @IsNumber()
   taxPEN: number = 0;
 
+  @ValidateIf((o) => o.currency === SaleCurrency.USD)
   @IsOptional()
   @IsNumber()
   taxUSD: number = 0;
@@ -26,11 +36,11 @@ export class CreateSaleDto {
   @IsNumber()
   status: number = 1;
 
-  @IsString()
-  responsible: string;
+  @IsEnum(SaleResponsible)
+  responsible: SaleResponsible;
 
-  @IsString()
-  type: string;
+  @IsEnum(SaleType)
+  type: SaleType;
 
   @IsOptional()
   @IsString()

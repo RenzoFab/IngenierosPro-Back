@@ -1,3 +1,4 @@
+import { CouponService } from './../coupon/coupon.service';
 import { CreateSaleDetailDto } from './dto/create-sale-detail.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindSaleDto } from './dto/find-sale.dto';
@@ -20,6 +21,7 @@ export class SaleService {
     private courseRepository: Repository<Course>,
     @InjectRepository(SaleDetail)
     private enrollmentRepository: Repository<Enrollment>,
+    private couponService: CouponService,
   ) {}
 
   async findAll({
@@ -64,22 +66,62 @@ export class SaleService {
     return sale;
   }
 
-  async create(createSaleDto: CreateSaleDto, studentId: number) {
+  async create(
+    {
+      currency,
+      priceBase,
+      pricePEN,
+      priceUSD,
+      responsible,
+      status,
+      taxPEN,
+      taxUSD,
+      type,
+      tokenPayment,
+    }: CreateSaleDto,
+    studentId: number,
+  ) {
     const date = new Date();
     const newSale = this.saleRepository.create({
-      ...createSaleDto,
+      currency,
+      priceBase,
+      pricePEN: currency === 'PEN' ? pricePEN : 0,
+      priceUSD: currency === 'USD' ? priceUSD : 0,
+      responsible,
+      status,
+      taxPEN: currency === 'PEN' ? taxPEN : 0,
+      taxUSD: currency === 'USD' ? taxUSD : 0,
+      type,
       date,
       paymentDate: date,
       products: '',
-      transactionNumber: createSaleDto.tokenPayment,
+      transactionNumber: tokenPayment,
+      studentId,
     });
     const sale = await this.saleRepository.save(newSale);
     return sale;
   }
 
-  async createSaleDetail(createSaleDetailDto: CreateSaleDetailDto) {
+  async createSaleDetail({
+    currency,
+    serviceId,
+    serviceType,
+    status,
+    couponDiscountPEN,
+    couponDiscountUSD,
+    couponId,
+    pricePEN,
+    priceUSD,
+  }: CreateSaleDetailDto) {
+    // const coupon = this.couponService.findOne(couponId)
     const newSaleDetail = this.saleDetailRepository.create({
-      ...createSaleDetailDto,
+      couponDiscountPEN,
+      couponDiscountUSD,
+      pricePEN,
+      priceUSD,
+      serviceId,
+      serviceType,
+      status,
       accessEndDate: '',
       accessStartDate: '',
       userCountry: '',

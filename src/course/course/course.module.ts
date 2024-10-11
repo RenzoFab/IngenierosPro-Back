@@ -25,6 +25,7 @@ import { Enrollment } from './entities/enrollment.entity';
     AuthModule,
     forwardRef(() => SaleModule),
   ],
+  exports: [TypeOrmModule],
 })
 export class CourseModule {
   // private readonly logger = new Logger(CourseModule.name);

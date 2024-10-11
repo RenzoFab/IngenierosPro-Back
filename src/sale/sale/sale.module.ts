@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import { SaleDetail } from './entities/sale-detail.entity';
 import { CourseModule } from 'src/course/course/course.module';
+import { CouponModule } from '../coupon/coupon.module';
 
 @Module({
   controllers: [SaleController],
@@ -13,8 +14,9 @@ import { CourseModule } from 'src/course/course/course.module';
   imports: [
     TypeOrmModule.forFeature([Sale, SaleDetail]),
     AuthModule,
+    CouponModule,
     forwardRef(() => CourseModule),
   ],
-  exports: [TypeOrmModule],
+  exports: [SaleService, TypeOrmModule],
 })
 export class SaleModule {}

@@ -10,7 +10,6 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import { ProductCartDto } from 'src/compra/dto/productos-cart.dto';
 
 export class CreateCulqiOrderDto {
   @IsString()

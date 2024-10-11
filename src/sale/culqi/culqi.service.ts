@@ -1,10 +1,11 @@
+import { SaleService } from './../sale/sale.service';
 import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { FetchAdapter } from 'src/common/adapters/fetch-adapter.interface';
-import { DataSource } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import {
   CreateCulqiChargeDto,
   CreateCulqiOrderDto,
@@ -16,10 +17,15 @@ import { v4 as uuid } from 'uuid';
 import { CaptureCharge, CreateOrder, WebhookOrder } from './interfaces';
 import { Data } from './interfaces/webhook-order.interface';
 import { CreateCharge } from './interfaces/create-charge.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { SaleDetail } from '../sale/entities/sale-detail.entity';
 
 @Injectable()
 export class CulqiService {
   constructor(
+    @InjectRepository(SaleDetail)
+    private saleDetailRepository: Repository<SaleDetail>,
+    private readonly saleService: SaleService,
     private readonly dataSource: DataSource,
     private readonly http: FetchAdapter,
   ) {}
@@ -94,7 +100,7 @@ export class CulqiService {
       await this.validateStudentPurchase(
         studentId,
         companyName,
-        createProductCulqiOrderDto.productos,
+        createProductCulqiOrderDto.products,
       );
       const { order_id } = await this.createOrder(
         companyName,
@@ -136,7 +142,10 @@ export class CulqiService {
           WHERE compra_token_pasarela = ?`,
           [data.id],
         );
-        await this.updatePurchaseOnDB(compra_id, data.id);
+        //TODO: Crear venta
+        // await this.updatePurchaseOnDB(compra_id, data.id);
+        //TODO: Crear Detalle venta
+        //TODO: Matricular
         // await this.enrollStudents(
         //   institucion_nombre,
         //   compra_id,
@@ -204,22 +213,42 @@ export class CulqiService {
     createProductCulqiChargeDto: CreateProductCulqiChargeDto,
   ) {
     try {
-      await this.validateStudentPurchase(
-        studentId,
-        companyName,
-        createProductCulqiChargeDto.productos,
-      );
-      const res = await this.createCharge(
+      const { products } = createProductCulqiChargeDto;
+      const ownProducts = await this.saleDetailRepository.find({
+        select: { serviceId: true, serviceType: true },
+        where: {
+          sale: { studentId },
+        },
+      });
+      ownProducts.forEach((own) => {
+        const isDuplicated = products.some(
+          (product) =>
+            product.id === own.serviceId && product.tipo === own.serviceType,
+        );
+        if (isDuplicated) {
+          throw new BadRequestException(
+            `Está intentando comprar un producto que ya ha comprado anteriormente: ${own.serviceType} con id ${own.serviceId}.`,
+          );
+        }
+      });
+
+      const charge = await this.createCharge(
         companyName,
         createProductCulqiChargeDto,
       );
+
+      //TODO: Crear venta
+// this.saleService()
+
+      //TODO: Crear Detalle venta
+      //TODO: Matricular
       await this.buyProducts(
-        res.id,
+        charge.id,
         companyName,
         studentId,
         createProductCulqiChargeDto,
       );
-      const capture = await this.captureCharge(res.id);
+      const capture = await this.captureCharge(charge.id);
       return capture;
     } catch (error) {
       console.log(`Culqi error on create charge - ${error}`);
@@ -251,7 +280,11 @@ export class CulqiService {
       charge_id,
       createProductCulqiChargeDto,
     );
-    await this.updatePurchaseOnDB(compra_id, charge_id);
+
+    //TODO: Crear venta
+    // await this.updatePurchaseOnDB(compra_id, charge_id);
+    //TODO: Crear Detalle venta
+    //TODO: Matricular
     // await this.enrollStudents(
     //   institucion,
     //   compra_id,
@@ -323,7 +356,7 @@ export class CulqiService {
       cupon_id,
       moneda_tipo,
       precio_total,
-      productos,
+      products,
     }: CreateProductCulqiChargeDto | CreateProductCulqiOrderDto,
   ) {
     try {
@@ -338,7 +371,7 @@ export class CulqiService {
           order_id,
           'Culqi',
           'Culqi',
-          JSON.stringify(productos),
+          JSON.stringify(products),
         ],
       );
       const [result] = await this.dataSource.query(
@@ -351,27 +384,27 @@ export class CulqiService {
     }
   }
 
-  private async updatePurchaseOnDB(compra_id: number, order_id: string) {
-    try {
-      const fecha_actual = new Date()
-        .toISOString()
-        .slice(0, 19)
-        .replace('T', ' ');
-      await this.dataSource.query(
-        'CALL sp_update_tbl_compra_prueba(?,?,?,?,?)',
-        [
-          compra_id,
-          0, // * impuesto
-          order_id,
-          0,
-          fecha_actual,
-        ],
-      );
-    } catch (error) {
-      console.log(`Culqi error on update purchase on DB - ${error}`);
-      throw error;
-    }
-  }
+  // private async updatePurchaseOnDB(compra_id: number, order_id: string) {
+  //   try {
+  //     const fecha_actual = new Date()
+  //       .toISOString()
+  //       .slice(0, 19)
+  //       .replace('T', ' ');
+  //     await this.dataSource.query(
+  //       'CALL sp_update_tbl_compra_prueba(?,?,?,?,?)',
+  //       [
+  //         compra_id,
+  //         0, // * impuesto
+  //         order_id,
+  //         0,
+  //         fecha_actual,
+  //       ],
+  //     );
+  //   } catch (error) {
+  //     console.log(`Culqi error on update purchase on DB - ${error}`);
+  //     throw error;
+  //   }
+  // }
 
   private removeNumbers(input: string): string {
     return input.replace(/\d+/g, '');
