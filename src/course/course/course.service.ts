@@ -127,6 +127,10 @@ export class CourseService {
   async findOne(id: number, { company, published, state }: FindOneCourseDto) {
     try {
       const currentDate = new Date();
+      const query = this.courseRepository
+        .createQueryBuilder('course')
+        .leftJoinAndSelect('course.modules', 'modules')
+        .leftJoinAndSelect('modules.sessions', 'sessions');
       const relations = ['modules', 'modules.sessions'];
       const select = {
         modules: {

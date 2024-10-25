@@ -8,6 +8,7 @@ import { Course } from './entities';
 import { Material, Module as module, Session, Task } from './entities';
 import { SaleModule } from 'src/sale/sale/sale.module';
 import { Enrollment } from './entities/enrollment.entity';
+import { Objective } from './entities/objective.entity';
 
 @Module({
   controllers: [CourseController],
@@ -21,6 +22,7 @@ import { Enrollment } from './entities/enrollment.entity';
       module,
       Session,
       Task,
+      Objective,
     ]),
     AuthModule,
     forwardRef(() => SaleModule),
